@@ -5,7 +5,7 @@ function love.load()
     updateScale(love.graphics.getDimensions())
     lever = {}
     lever.x = 1420
-    lever.y = 2
+    lever.y = 280
 end
 
 function love.resize(w, h)
