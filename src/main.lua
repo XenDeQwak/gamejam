@@ -1,7 +1,8 @@
 function love.load()
     player = {}
     pc = {}
-    love.window.setMode(1920, 1080, {resizable = true})
+    love.window.setMode(0, 0, {fullscreen = true, fullscreentype = "desktop"})
+
 end
 
 function love.update(dt)
