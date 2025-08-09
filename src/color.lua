@@ -5,14 +5,14 @@ local color = {
     ALPHA = 1
 }
 
-function color.setRGBA(red, green, blue, alpha)
+color.setRGBA = function (red, green, blue, alpha)
     color.RED   = red
     color.GREEN = green
     color.BLUE  = blue
     color.ALPHA = alpha or 1
 end
 
-function color.getRGBA()
+color.getRGBA = function ()
     return {color.RED, color.GREEN, color.BLUE, color.ALPHA}
 end
 
