@@ -1,11 +1,13 @@
 local scale, offsetX, offsetY, isLeverDown, originalY
 local radius = 80
-local resetTimer = 0  
+local resetTimer = 0
 
 function love.load()
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
     updateScale(love.graphics.getDimensions())
     lever = {x = 1420, y = 280}
+    msgTab = {x = 510, y = 150};
+    slotsTab = {x = 400, y = 150};
     isLeverDown = false
     originalY = lever.y
 end
@@ -45,7 +47,7 @@ function createScreen()
 
     local color = require "color"
 
-    color.setRGBA(0, 0, 0, 1)
+    color.setRGBA(0, 0, 0)
     love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
@@ -56,6 +58,14 @@ function createScreen()
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
     love.graphics.circle("fill", lever.x, lever.y, radius)
+
+    color.setRGBA(255, 255, 255)
+    love.graphics.setColor(color.getRGBA())
+    love.graphics.rectangle("fill", slotsTab.x, slotsTab.y, 100, 50)
+
+    color.setRGBA(255, 255, 255)
+    love.graphics.setColor(color.getRGBA())
+    love.graphics.rectangle("fill", msgTab.x, msgTab.y, 100, 50)
 end
 
 function slot()
