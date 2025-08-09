@@ -12,16 +12,6 @@ function love.load()
     originalY = lever.y
 end
 
-function love.resize(w, h)
-    updateScale(w, h)
-end
-
-function updateScale(w, h)
-    scale = math.min(w / baseW, h / baseH)
-    offsetX = (w - baseW * scale) / 2
-    offsetY = (h - baseH * scale) / 2
-end
-
 function love.draw()
     love.graphics.push()
     love.graphics.translate(offsetX, offsetY)
@@ -35,6 +25,16 @@ end
 
 function love.update(dt)
     leverTimer(dt)
+end
+
+function love.resize(w, h)
+    updateScale(w, h)
+end
+
+function updateScale(w, h)
+    scale = math.min(w / baseW, h / baseH)
+    offsetX = (w - baseW * scale) / 2
+    offsetY = (h - baseH * scale) / 2
 end
 
 function love.mousepressed(x, y, button)
