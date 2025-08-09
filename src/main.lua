@@ -33,15 +33,21 @@ function love.update(dt)
 end
 
 function createScreen()
-    love.graphics.setColor(1, 1, 1)
+
+    local color = require "color"
+
+    color.setRGBA(0, 0, 0, 1)
+    love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
-    love.graphics.setColor(157/255, 95/255, 70/255)
+    color.setRGBA(157, 95, 70)
+    love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("fill", 400, 200, 850, 650)
 
     local r = 80       
 
-    love.graphics.setColor(255, 0, 0) 
+    color.setRGBA(255, 0, 0)
+    love.graphics.setColor(color.getRGBA())
     love.graphics.circle("fill", lever.x, lever.y, r)
 end
 
