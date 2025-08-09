@@ -1,6 +1,8 @@
 local scale, offsetX, offsetY, isLeverDown, originalY
 local radius = 80
 local resetTimer = 0  
+local intRoundCount = 1
+local fltMoney = 1000
 
 function love.load()
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
@@ -20,7 +22,7 @@ function updateScale(w, h)
     offsetY = (h - baseH * scale) / 2
 end
 
-function love.draw()
+function love.draw() 
     love.graphics.push()
     love.graphics.translate(offsetX, offsetY)
     love.graphics.scale(scale)
@@ -56,6 +58,13 @@ function createScreen()
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
     love.graphics.circle("fill", lever.x, lever.y, radius)
+
+    -- Font for the Round, Money, and Time
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont(32))
+    love.graphics.print("Round: " .. intRoundCount, 425, 210)
+    love.graphics.print("Money: $" .. fltMoney, 425, 250)
+    love.graphics.print("Time:  " .. os.date("%m-%d-%Y"), 940, 210)
 end
 
 function slot()
@@ -76,6 +85,7 @@ function onLeverClick(x, y)
         lever.y = lever.y + 450
         isLeverDown = true
         resetTimer = 1
+        intRoundCount = intRoundCount + 1
     end
 end
 
