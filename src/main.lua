@@ -49,9 +49,9 @@ function createScreen()
     love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
-    love.graphics.setColor(157/255, 95/255, 70/255)
+    color.setRGBA(222, 184, 135)
+    love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("fill", 400, 200, 850, 650)
-   
 
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
@@ -59,7 +59,6 @@ function createScreen()
 end
 
 function slot()
-    love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.print("THE SLOT IS ROLLING", 450, 500)
 end

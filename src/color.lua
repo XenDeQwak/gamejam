@@ -13,7 +13,7 @@ function color.setRGBA(red, green, blue, alpha)
 end
 
 function color.getRGBA()
-    return {color.RED, color.GREEN, color.BLUE, color.ALPHA}
+    return love.math.colorFromBytes(color.RED, color.GREEN, color.BLUE)
 end
 
 return color
