@@ -44,11 +44,11 @@ function createScreen()
     love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("fill", 400, 200, 850, 650)
 
-    local r = 80       
+    local radius = 80
 
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
-    love.graphics.circle("fill", lever.x, lever.y, r)
+    love.graphics.circle("fill", lever.x, lever.y, radius)
 end
 
 function getMouse()

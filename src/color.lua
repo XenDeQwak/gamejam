@@ -1,4 +1,3 @@
--- color.lua
 local color = {
     RED = 0,
     GREEN = 0,
