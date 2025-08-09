@@ -92,9 +92,8 @@ end
 function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
-        if resetTimer <= 0 then
-            lever.y = originalY
-            isLeverDown = false
-        end
+    else
+        lever.y = originalY
+        isLeverDown = false
     end
 end
