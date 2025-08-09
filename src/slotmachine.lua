@@ -20,9 +20,9 @@ slotmachine.spin = function()
     for i = 1, #slotmachine.reelIndex do
         slotmachine.reelIndex[i] = math.random(1, #slotmachine.reels[i])
     end
-    print("Symbols: " + 
-          slotmachine.reels[1][slotmachine.reelIndex[1]] + ", " +
-          slotmachine.reels[2][slotmachine.reelIndex[2]] + ", " +
+    print("Symbols: " .. 
+          slotmachine.reels[1][slotmachine.reelIndex[1]] .. ", " ..
+          slotmachine.reels[2][slotmachine.reelIndex[2]] .. ", " ..
           slotmachine.reels[3][slotmachine.reelIndex[3]])
 end
 
