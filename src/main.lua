@@ -3,7 +3,10 @@ local radius = 80
 local resetTimer = 0
 
 function love.load()
+    love.window.setMode(1280,720,{resizable=true})
+    love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
+
     updateScale(love.graphics.getDimensions())
     lever = {x = 1420, y = 280}
     msgTab = {x = 510, y = 150};
@@ -44,7 +47,6 @@ function love.mousepressed(x, y, button)
 end
 
 function createScreen()
-
     local color = require "color"
 
     color.setRGBA(0, 0, 0)
@@ -69,7 +71,6 @@ function createScreen()
 end
 
 function slot()
-    love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.print("THE SLOT IS ROLLING", 450, 500)
 end
 
@@ -81,7 +82,7 @@ function onLeverClick(x, y)
     local dy = my - lever.y
     local distance = math.sqrt(dx * dx + dy * dy)
 
-    if love.mouse.isDown(1) and distance <= radius and resetTimer <= 0 then
+    if distance <= radius and resetTimer <= 0 then
         lever.y = lever.y + 450
         isLeverDown = true
         resetTimer = 1
