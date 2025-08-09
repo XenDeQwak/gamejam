@@ -1,13 +1,29 @@
+local scale, offsetX, offsetY
+
 function love.load()
-    player = {}
-    pc = {}
-    love.window.setMode(1920, 1080, {resizable = true})
+    love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
+    updateScale(love.graphics.getDimensions())
 end
 
-function love.update(dt)
+function love.resize(w, h)
+    updateScale(w, h)
+end
+
+function updateScale(w, h)
+    scale = math.min(w / baseW, h / baseH)
+    offsetX = (w - baseW * scale) / 2
+    offsetY = (h - baseH * scale) / 2
 end
 
 function love.draw()
+    love.graphics.push()
+    love.graphics.translate(offsetX, offsetY)
+    love.graphics.scale(scale)
+    createScreen()
+    love.graphics.pop()
+end
+
+function createScreen()
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
