@@ -17,6 +17,7 @@ function love.load()
     slotsTab = {x = 400, y = 150};
     isLeverDown = false
     originalY = lever.y
+    event.load()
 end
 
 function love.draw()
@@ -38,7 +39,7 @@ end
 
 function love.update(dt)
     leverTimer(dt)
-    event.update(dt)
+    -- event.update(dt)
 end
 
 function love.resize(w, h)
