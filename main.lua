@@ -22,7 +22,7 @@ function love.load()
     isLeverDown = false
     originalY = lever.y
     event.load()
-    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
 
 end
 
@@ -92,7 +92,7 @@ function onLeverClick(x, y)
     if distance <= radius and resetTimer <= 0 then
         isLeverDown = true
         resetTimer = 1
-        lever.Image = love.graphics.newImage("assets/slot_lever_active.png")
+        lever.Image = love.graphics.newImage("assets/lever/slot_lever_active.png")
 
         -- event.nextEvent()
         slotmachine.spin()
@@ -103,7 +103,7 @@ function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
     else
-        lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+        lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
         isLeverDown = false
     end
 end
