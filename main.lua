@@ -1,6 +1,8 @@
-local scale, offsetX, offsetY, isLeverDown, originalY
+local isLeverDown, originalY
 local radius = 80
 local resetTimer = 0
+local event = require "src/event"
+local screen= require "src.screen"
 
 function love.load()
 
@@ -10,37 +12,40 @@ function love.load()
     love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
 
-    updateScale(love.graphics.getDimensions())
+    screen.updateScale(love.graphics.getDimensions())
+
     lever = {x = 1420, y = 280}
     msgTab = {x = 510, y = 150};
     slotsTab = {x = 400, y = 150};
     isLeverDown = false
     originalY = lever.y
+    event.load()
 end
 
 function love.draw()
     love.graphics.push()
-    love.graphics.translate(offsetX, offsetY)
-    love.graphics.scale(scale)
+    love.graphics.translate(screen.offsetX, screen.offsetY)
+    love.graphics.scale(screen.scale)
     createScreen()
+
     if isLeverDown then
         slot()
     end
+
+    if event.message then 
+        event.draw()
+    end
+
     love.graphics.pop()
 end
 
 function love.update(dt)
     leverTimer(dt)
+    -- event.update(dt)
 end
 
 function love.resize(w, h)
-    updateScale(w, h)
-end
-
-function updateScale(w, h)
-    scale = math.min(w / baseW, h / baseH)
-    offsetX = (w - baseW * scale) / 2
-    offsetY = (h - baseH * scale) / 2
+    screen.updateScale(w,h)
 end
 
 function love.mousepressed(x, y, button)
@@ -76,17 +81,20 @@ function onLeverClick(x, y)
 
     slotmachine.spin()
 
-    mx = (x - offsetX) / scale
-    my = (y - offsetY) / scale
+    mx = (x - screen.offsetX) / screen.scale
+    my = (y - screen.offsetY) / screen.scale
 
     local dx = mx - lever.x
     local dy = my - lever.y
     local distance = math.sqrt(dx * dx + dy * dy)
 
+-- lever onclick
     if distance <= radius and resetTimer <= 0 then
         lever.y = lever.y + 450
         isLeverDown = true
         resetTimer = 1
+
+        event.nextEvent()
     end
 end
 
