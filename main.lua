@@ -41,7 +41,6 @@ end
 
 function love.update(dt)
     leverTimer(dt)
-    -- event.update(dt)
 end
 
 function love.resize(w, h)

@@ -5,7 +5,6 @@ local event = {
     debt=0,
     availableEvents={},
     message=nil,
-    popupTimer=0
 }
 function event.load()
     notifSpriteBase = love.graphics.newImage("assets/notif_box.png")
@@ -14,14 +13,6 @@ function event.draw()
     love.graphics.draw(notifSpriteBase,450,500)
     love.graphics.print(event.message,450,500)
 end
-
--- function event.update(dt)
---     if event.popupTimer > 0 then
---         event.popupTimer = event.popupTimer - dt
---     else
---         event.message=nil
---     end
--- end
 
 function event.mousepressed(x,y,button)
     if button == 1 then
