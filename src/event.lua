@@ -8,7 +8,7 @@ local event = {
     popupTimer=0
 }
 function event.load()
-    notifSpriteBase = love.graphics.newImage("assets/notif_box.png")
+    notifSpriteBase = love.graphics.newImage("assets/ui/notif_box.png")
 end
 function event.draw()
     love.graphics.draw(notifSpriteBase,450,500)

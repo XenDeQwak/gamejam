@@ -1,30 +1,28 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 1
+slotmachine.initialWinningChance = 0.5
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
-slotmachine.decreaseAmount = {0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10}
+slotmachine.decreaseAmount = {0.0}
 slotmachine.decreaseChance = 0.10
 
 local symbols = {
     "SEVEN",
     "CHERRY",
     "BAR",
-    "ORANGE",
     "BELL"
 }
 
 local reels = {
-    { "SEVEN", "CHERRY", "BAR", "ORANGE", "BELL" },
-    { "BELL", "ORANGE", "BAR", "CHERRY", "SEVEN" },
-    { "CHERRY", "BAR", "SEVEN", "BELL", "ORANGE" }
+    { "SEVEN", "CHERRY", "BAR", "BELL" },
+    { "BELL", "BAR", "CHERRY", "SEVEN" },
+    { "CHERRY", "BAR", "SEVEN", "BELL" }
 }
 
 local winningIndex = {
-    ["SEVEN"] = {1, 5, 3},
-    ["CHERRY"] = {2, 4, 1},
-    ["BAR"] = {3, 3, 2},
-    ["ORANGE"] = {4, 2, 5},
-    ["BELL"] = {5, 1, 4}
+    ["SEVEN"] = {1, 4, 3},
+    ["CHERRY"] = {2, 3, 1},
+    ["BAR"] = {3, 2, 2},
+    ["BELL"] = {4, 1, 4}
 }
 
 local function tableEquals(t1, t2)
@@ -109,13 +107,15 @@ local function rollSymbols()
 
     end
 
-    print("Final Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
-
     local symbols = {
         reels[1][chosenSymbolIndices[1]],
         reels[2][chosenSymbolIndices[2]],
         reels[3][chosenSymbolIndices[3]]
     }
+
+    print("Final Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
+    print("Final Symbols: " .. table.concat(symbols, ", ") .. "\n")
+
 
     return {symbols, isWin}
 
@@ -153,7 +153,7 @@ slotmachine.test_rollSymbols = function (testAttempts)
     local lossCount = 0
 
     for i=1, testAttempts do
-        local isWin = rollSymbols()
+        local isWin = rollSymbols()[2]
         if isWin then
             winCount = winCount + 1
         else
