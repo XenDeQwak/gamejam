@@ -80,6 +80,9 @@ end
 
 function onLeverClick(x, y)
 
+    local slotmachine = require "slotmachine"
+
+    slotmachine.test_rollSymbols(100)
 
     mx = (x - screen.offsetX) / screen.scale
     my = (y - screen.offsetY) / screen.scale
