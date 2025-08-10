@@ -1,8 +1,9 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.60
+slotmachine.initialWinningChance = 1
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
-slotmachine.decreaseChance = 0.02
+slotmachine.decreaseAmount = {0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10}
+slotmachine.decreaseChance = 0.10
 
 local symbols = {
     "SEVEN",
@@ -121,6 +122,20 @@ local function rollSymbols()
 end
 
 slotmachine.spin = function()
+
+    print("Decrease Chance: " .. slotmachine.decreaseChance)
+    local chance = math.random()
+    local chanceToDecrease = slotmachine.decreaseChance
+    local decreaseChance = slotmachine.decreaseAmount[math.random(1, #slotmachine.decreaseAmount)]
+    if chance < chanceToDecrease and slotmachine.currentWinningChance > 0.10 then
+        slotmachine.currentWinningChance = slotmachine.currentWinningChance - decreaseChance
+        print("Decreased Winning Chance by: " .. decreaseChance)
+    end
+
+    if slotmachine.decreaseChance < 0.50 then
+        slotmachine.decreaseChance = slotmachine.decreaseChance + 0.01
+    end
+
     local rolledSymbols = rollSymbols()
     local symbols = rolledSymbols[1]
     local isWin = rolledSymbols[2]
@@ -129,7 +144,6 @@ slotmachine.spin = function()
     --print("ProjectedWin?: " .. tostring(test))
     print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
     
-
     return isWin
 end
 
