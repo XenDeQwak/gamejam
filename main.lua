@@ -81,7 +81,7 @@ function onLeverClick(x, y)
 
     local slotmachine = require "src/slotmachine"
 
-    slotmachine.test_spin(10)
+    slotmachine.spin()
 
     mx = (x - offsetX) / scale
     my = (y - offsetY) / scale
