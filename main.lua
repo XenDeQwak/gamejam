@@ -1,7 +1,7 @@
 local isLeverDown, originalY
 local radius = 80
 local resetTimer = 0
-local event = require "src/event"
+local event = require "src.event"
 local screen= require "src.screen"
 
 function love.load()
@@ -94,7 +94,7 @@ function onLeverClick(x, y)
         isLeverDown = true
         resetTimer = 1
 
-        event.nextEvent()
+        -- event.nextEvent()
     end
 end
 
