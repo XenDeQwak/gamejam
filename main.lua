@@ -1,4 +1,4 @@
-local isLeverDown, originalY
+local isLeverDown
 local radius = 80
 local resetTimer = 0
 local event = require "src.event"
@@ -22,7 +22,7 @@ function love.load()
     slotsTab = {x = 400, y = 150};
 
     isLeverDown = false
-    originalY = lever.y
+
     event.load()
     lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
     bm = buttonMaker:new()
@@ -49,6 +49,7 @@ function love.load()
     addButton("Test", 100, 100, btnWidth, btnHeight, nil, fontSize)
     addButton("Test2", 200, 100, btnWidth, btnHeight, nil, fontSize)
 
+    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
 end
 
 function love.draw()
@@ -111,7 +112,6 @@ end
 
 function onLeverClick(x, y)
 
-
     mx = (x - screen.offsetX) / screen.scale
     my = (y - screen.offsetY) / screen.scale
 
@@ -123,7 +123,7 @@ function onLeverClick(x, y)
     if distance <= radius and resetTimer <= 0 then
         isLeverDown = true
         resetTimer = 1
-        lever.Image = love.graphics.newImage("assets/slot_lever_active.png")
+        lever.Image = love.graphics.newImage("assets/lever/slot_lever_active.png")
 
         -- event.nextEvent()
         slotmachine.spin()
@@ -134,7 +134,7 @@ function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
     else
-        lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+        lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
         isLeverDown = false
     end
 end
