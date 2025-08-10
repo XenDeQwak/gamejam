@@ -11,8 +11,8 @@ function event.load()
     notifSpriteBase = love.graphics.newImage("assets/notif_box.png")
 end
 function event.draw()
-    -- love.graphics.print(event.message,450, 500)
     love.graphics.draw(notifSpriteBase,450,500)
+    love.graphics.print(event.message,450,500)
 end
 
 -- function event.update(dt)
@@ -83,7 +83,6 @@ function event.nextEvent()
     end
     local available = availableEvents()
     if #available == 0 then
-        print("ror")
         return nil
     end
     local choice = available[math.random(#available)]
