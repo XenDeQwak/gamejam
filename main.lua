@@ -80,7 +80,7 @@ end
 
 function onLeverClick(x, y)
 
-    local slotmachine = require "slotmachine"
+    local slotmachine = require "src/slotmachine"
 
     mx = (x - screen.offsetX) / screen.scale
     my = (y - screen.offsetY) / screen.scale
