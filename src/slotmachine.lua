@@ -1,6 +1,6 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.20
+slotmachine.initialWinningChance = 0.60
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
 slotmachine.decreaseChance = 0.02
 
@@ -51,6 +51,8 @@ end
 
 local function rollSymbols()
 
+    print("Win Chance: " .. slotmachine.currentWinningChance)
+
     local chance = math.random()
     local isWin = false
     local lossSeverity = 0
@@ -71,24 +73,35 @@ local function rollSymbols()
 
         local loopGuard = 50
         local stillHasWinningIndices = true
-        while stillHasWinningIndices or loopGuard > 0 do
-            local randomIndex = math.random(1, #chosenSymbolIndices)
-            local plusOrMinus = math.random(0, 1) == 0 and -1 or 1
-            chosenSymbolIndices[randomIndex] = chosenSymbolIndices[randomIndex] + plusOrMinus
-            if chosenSymbolIndices[randomIndex] < 1 then 
-                chosenSymbolIndices[randomIndex] = #reels[randomIndex]
-            elseif chosenSymbolIndices[randomIndex] > #reels[randomIndex] then
-                chosenSymbolIndices[randomIndex] = 1
+        while stillHasWinningIndices and loopGuard > 0 do
+            loopGuard = loopGuard - 1
+            --print("Loop Guard: " .. loopGuard)
+
+            for i=1, lossSeverity do
+                local randomIndex = math.random(1, #chosenSymbolIndices)
+                local plusOrMinus = math.random(0, 1) == 0 and -1 or 1
+                chosenSymbolIndices[randomIndex] = chosenSymbolIndices[randomIndex] + plusOrMinus
+                if chosenSymbolIndices[randomIndex] < 1 then 
+                    chosenSymbolIndices[randomIndex] = #reels[randomIndex]
+                elseif chosenSymbolIndices[randomIndex] > #reels[randomIndex] then
+                    chosenSymbolIndices[randomIndex] = 1
+                end
             end
-            for null, indices in pairs(winningIndex) do
-                if tableEquals(indices, chosenSymbolIndices) then
-                    stillHasWinningIndices = false
+            
+            stillHasWinningIndices = false
+            for symbol, indices in pairs(winningIndex) do
+                local found = tableEquals(indices, chosenSymbolIndices)
+                --print("Checking symbol: " .. symbol .. " with indices: " .. table.concat(indices, ", ") .. " against chosen indices: " .. table.concat(chosenSymbolIndices, ", ") .. "; isWin?=" .. tostring(found))
+                if found then
+                    stillHasWinningIndices = true
+                    print("Found Non-Winning Indices: " .. symbol)
                     break
                 end
             end
+
             print("Rerolled Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
-            loopGuard = loopGuard - 1
         end
+
         if loopGuard <= 0 then
             print("Warning: Loop guard triggered, unable to find a non-winning combination.")
         end
@@ -111,13 +124,13 @@ slotmachine.spin = function()
     local rolledSymbols = rollSymbols()
     local symbols = rolledSymbols[1]
     local isWin = rolledSymbols[2]
-    local test = symbols[1] == symbols[2] and symbols[2] == symbols[3]
+    --local test = symbols[1] == symbols[2] and symbols[2] == symbols[3]
 
-    print("ProjectedWin?: " .. tostring(test))
+    --print("ProjectedWin?: " .. tostring(test))
     print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
     
 
-    return isWin == test
+    return isWin
 end
 
 slotmachine.test_rollSymbols = function (testAttempts)
