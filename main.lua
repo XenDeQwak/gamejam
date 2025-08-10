@@ -1,10 +1,10 @@
-local isLeverDown, originalY
+local isLeverDown
 local radius = 80
 local resetTimer = 0
 local event = require "src.event"
 local screen= require "src.screen"
-local slotmachine = require "src/slotmachine"
-local color = require "src/color"
+local slotmachine = require "src.slotmachine"
+local color = require "src.color"
 
 function love.load()
 
@@ -20,10 +20,10 @@ function love.load()
     slotsTab = {x = 400, y = 150};
 
     isLeverDown = false
-    originalY = lever.y
-    event.load()
-    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
 
+    event.load()
+
+    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
 end
 
 function love.draw()
