@@ -59,7 +59,7 @@ function love.mousepressed(x, y, button)
 end
 
 function createScreen()
-    local color = require "color"
+    local color = require "src/color"
 
     color.setRGBA(0, 0, 0)
     love.graphics.setColor(color.getRGBA())
@@ -88,7 +88,7 @@ end
 
 function onLeverClick(x, y)
 
-    local slotmachine = require "slotmachine"
+    local slotmachine = require "src/slotmachine"
 
     slotmachine.test_rollSymbols(500)
 
