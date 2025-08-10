@@ -24,7 +24,7 @@ function love.load()
     isLeverDown = false
 
     event.load()
-    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
     bm = buttonMaker:new()
 
     local function addButton(label, xCoord, yCoord, width, height, onClick, fontSize)
