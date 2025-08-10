@@ -23,7 +23,7 @@ function love.load()
 
     event.load()
 
-    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
 end
 
 function love.draw()
@@ -79,8 +79,6 @@ function slot()
 end
 
 function onLeverClick(x, y)
-
-    local slotmachine = require "src/slotmachine"
 
     mx = (x - screen.offsetX) / screen.scale
     my = (y - screen.offsetY) / screen.scale
