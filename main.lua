@@ -5,6 +5,8 @@ local event = require "src.event"
 local screen= require "src.screen"
 local slotmachine = require "src/slotmachine"
 local color = require "src/color"
+local buttonMaker = require "src.buttonmaker"
+local bm
 
 function love.load()
 
@@ -23,6 +25,29 @@ function love.load()
     originalY = lever.y
     event.load()
     lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+    bm = buttonMaker:new()
+
+    local function addButton(label, xCoord, yCoord, width, height, onClick, fontSize)
+        local btn = bm:createButton(
+            label,
+            xCoord,
+            yCoord, 
+            width, 
+            height,
+            --onClick is a function call (function() [statements] end)
+            onClick
+        )
+        if fontSize then
+            btn.style.font = love.graphics.newFont(fontSize)
+        end
+    end
+
+    local btnWidth = 100
+    local btnHeight = 60
+    local fontSize = 20
+
+    addButton("Test", 100, 100, btnWidth, btnHeight, nil, fontSize)
+    addButton("Test2", 200, 100, btnWidth, btnHeight, nil, fontSize)
 
 end
 
@@ -31,6 +56,7 @@ function love.draw()
     love.graphics.translate(screen.offsetX, screen.offsetY)
     love.graphics.scale(screen.scale)
     createScreen()
+    
 
     if isLeverDown then
         slot()
@@ -40,8 +66,12 @@ function love.draw()
         event.draw()
     end
 
+    bm:draw()
+
     love.graphics.pop()
 end
+
+
 
 function love.update(dt)
     leverTimer(dt)
@@ -56,6 +86,7 @@ function love.mousepressed(x, y, button)
     if button == 1 then
         onLeverClick(x, y)
     end
+    bm:mousepressed(x, y, button)
 end
 
 function createScreen()
