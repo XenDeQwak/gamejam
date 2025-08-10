@@ -1,10 +1,10 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.5
+slotmachine.initialWinningChance = 0.20
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
 slotmachine.decreaseChance = 0.02
 
-slotmachine.symbols = {
+local symbols = {
     "SEVEN",
     "CHERRY",
     "BAR",
@@ -12,37 +12,19 @@ slotmachine.symbols = {
     "BELL"
 }
 
-slotmachine.reels = {
+local reels = {
     { "SEVEN", "CHERRY", "BAR", "ORANGE", "BELL" },
     { "BELL", "ORANGE", "BAR", "CHERRY", "SEVEN" },
     { "CHERRY", "BAR", "SEVEN", "BELL", "ORANGE" }
 }
 
---[[
-    Winning Indices:
-    1, 5, 3 - SEVEN
-    2, 4, 1 - CHERRY
-    3, 3, 4 - BAR
-    4, 2, 5 - ORANGE
-    5, 1, 4 - BELL
-]]
-
-slotmachine.winningIndex = {
-    {1, 5, 3}, -- SEVEN
-    {2, 4, 1}, -- CHERRY
-    {3, 3, 4}, -- BAR
-    {4, 2, 5}, -- ORANGE
-    {5, 1, 4}  -- BELL
+local winningIndex = {
+    ["SEVEN"] = {1, 5, 3},
+    ["CHERRY"] = {2, 4, 1},
+    ["BAR"] = {3, 3, 2},
+    ["ORANGE"] = {4, 2, 5},
+    ["BELL"] = {5, 1, 4}
 }
-
-function slotmachine.winningIndex.contains(tbl)
-    for i, v in ipairs(slotmachine.winningIndex) do
-        if v[1] == tbl[1] and v[2] == tbl[2] and v[3] == tbl[3] then
-            return true
-        end
-    end
-    return false
-end
 
 local function tableEquals(t1, t2)
   if #t1 ~= #t2 then return false end
@@ -53,6 +35,18 @@ local function tableEquals(t1, t2)
     end
   end
   return true
+end
+
+local function copyTable(t)
+    local copy = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            copy[k] = copyTable(v)
+        else
+            copy[k] = v
+        end
+    end
+    return copy
 end
 
 local function rollSymbols()
@@ -66,54 +60,64 @@ local function rollSymbols()
         lossSeverity = math.random(1, 5)
     end
 
-    local chosenSymbols = slotmachine.winningIndex[math.random(1, #slotmachine.winningIndex)]
-    print("Chosen Combination: " .. table.concat(chosenSymbols, ", "))
+    print("IsWin?=" .. tostring(isWin))
 
-    if isWin then
-        print("Won\n")
-        return {chosenSymbols, true}
-    else
-        -- Check if the chosen symbols are a winning combination, repeat if still are
-        for i, v in ipairs(slotmachine.winningIndex) do
-            if tableEquals(chosenSymbols, v) then
-                print("Rerolling Chosen Combinations: " .. table.concat(chosenSymbols, ", "))
-                for j=1, lossSeverity do
-                    local randomIndex = math.random(1, #chosenSymbols)
-                    local plusOrMinus = math.random(0, 1) == 0 and -1 or 1
-                    chosenSymbols[randomIndex] = chosenSymbols[randomIndex] + plusOrMinus
-                    chosenSymbols[randomIndex] = chosenSymbols[randomIndex] % #chosenSymbols + 1
-                    --print(table.concat(chosenSymbols, ", "))
+    local chosenSymbol = symbols[math.random(1, #symbols)]
+    local chosenSymbolIndices = copyTable(winningIndex[chosenSymbol])
+    print("Chosen Symbol: " .. chosenSymbol .. " with indices: " .. table.concat(chosenSymbolIndices, ", "))
+
+    if not isWin then
+        print("Loss Severity: " .. lossSeverity)
+
+        local loopGuard = 50
+        local stillHasWinningIndices = true
+        while stillHasWinningIndices or loopGuard > 0 do
+            local randomIndex = math.random(1, #chosenSymbolIndices)
+            local plusOrMinus = math.random(0, 1) == 0 and -1 or 1
+            chosenSymbolIndices[randomIndex] = chosenSymbolIndices[randomIndex] + plusOrMinus
+            if chosenSymbolIndices[randomIndex] < 1 then 
+                chosenSymbolIndices[randomIndex] = #reels[randomIndex]
+            elseif chosenSymbolIndices[randomIndex] > #reels[randomIndex] then
+                chosenSymbolIndices[randomIndex] = 1
+            end
+            for null, indices in pairs(winningIndex) do
+                if tableEquals(indices, chosenSymbolIndices) then
+                    stillHasWinningIndices = false
+                    break
                 end
             end
+            print("Rerolled Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
+            loopGuard = loopGuard - 1
         end
-        print("Final Chosen Combination: " .. table.concat(chosenSymbols, ", ") .. "\n")
-        return {chosenSymbols, false}
+        if loopGuard <= 0 then
+            print("Warning: Loop guard triggered, unable to find a non-winning combination.")
+        end
+
     end
+
+    print("Final Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
+
+    local symbols = {
+        reels[1][chosenSymbolIndices[1]],
+        reels[2][chosenSymbolIndices[2]],
+        reels[3][chosenSymbolIndices[3]]
+    }
+
+    return {symbols, isWin}
 
 end
 
 slotmachine.spin = function()
-
     local rolledSymbols = rollSymbols()
+    local symbols = rolledSymbols[1]
+    local isWin = rolledSymbols[2]
+    local test = symbols[1] == symbols[2] and symbols[2] == symbols[3]
+
+    print("ProjectedWin?: " .. tostring(test))
+    print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
     
-    local index = rolledSymbols[1]
-    local symbols = {}
-    symbols[1] = slotmachine.reels[1][index[1]]
-    symbols[2] = slotmachine.reels[2][index[2]]
-    symbols[3] = slotmachine.reels[3][index[3]]
 
-    print("Current Winning Chance: " .. slotmachine.currentWinningChance)
-    print("Symbols: " .. symbols[1] .. ", " .. symbols[2] .. ", " .. symbols[3])
-
-    local isWin = symbols[1] == symbols[2] and symbols[2] == symbols[3]
-    print("Is Win: " .. tostring(isWin) .. "\n")
-
-    if isWin then
-        return true
-    else
-        return false
-    end
-    
+    return isWin == test
 end
 
 slotmachine.test_rollSymbols = function (testAttempts)
@@ -122,7 +126,7 @@ slotmachine.test_rollSymbols = function (testAttempts)
     local lossCount = 0
 
     for i=1, testAttempts do
-        local isWin = rollSymbols()[2]
+        local isWin = rollSymbols()
         if isWin then
             winCount = winCount + 1
         else
