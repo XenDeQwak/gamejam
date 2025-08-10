@@ -3,6 +3,9 @@ local radius = 80
 local resetTimer = 0
 
 function love.load()
+
+    print("Game started!")
+    
     love.window.setMode(1280,720,{resizable=true})
     love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
@@ -74,7 +77,12 @@ function slot()
     love.graphics.print("THE SLOT IS ROLLING", 450, 500)
 end
 
-function onLeverClick(x, y) 
+function onLeverClick(x, y)
+
+    local slotmachine = require "slotmachine"
+
+    slotmachine.spin()
+
     mx = (x - offsetX) / scale
     my = (y - offsetY) / scale
 
