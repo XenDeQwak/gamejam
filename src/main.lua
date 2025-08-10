@@ -86,6 +86,8 @@ function onLeverClick(x, y)
         lever.y = lever.y + 450
         isLeverDown = true
         resetTimer = 1
+        local event = require("event")
+        event.nextEvent()
     end
 end
 
