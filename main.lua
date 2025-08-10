@@ -64,13 +64,6 @@ function createScreen()
     love.graphics.setColor(color.getRGBA())
     love.graphics.circle("fill", lever.x, lever.y, radius)
 
-    color.setRGBA(255, 255, 255)
-    love.graphics.setColor(color.getRGBA())
-    love.graphics.rectangle("fill", slotsTab.x, slotsTab.y, 100, 50)
-
-    color.setRGBA(255, 255, 255)
-    love.graphics.setColor(color.getRGBA())
-    love.graphics.rectangle("fill", msgTab.x, msgTab.y, 100, 50)
 end
 
 function slot()
