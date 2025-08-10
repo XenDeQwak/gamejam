@@ -3,6 +3,8 @@ local radius = 80
 local resetTimer = 0
 local event = require "src.event"
 local screen= require "src.screen"
+local slotmachine = require "src/slotmachine"
+local color = require "src/color"
 
 function love.load()
 
@@ -11,15 +13,17 @@ function love.load()
     love.window.setMode(1280,720,{resizable=true})
     love.graphics.setFont(love.graphics.newFont(32))
     love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
-
     screen.updateScale(love.graphics.getDimensions())
 
-    lever = {x = 1420, y = 280}
+    lever = {x = 1300, y = 280}
     msgTab = {x = 510, y = 150};
     slotsTab = {x = 400, y = 150};
+
     isLeverDown = false
     originalY = lever.y
     event.load()
+    lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
+
 end
 
 function love.draw()
@@ -55,7 +59,6 @@ function love.mousepressed(x, y, button)
 end
 
 function createScreen()
-    local color = require "src/color"
 
     color.setRGBA(0, 0, 0)
     love.graphics.setColor(color.getRGBA())
@@ -67,7 +70,7 @@ function createScreen()
 
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
-    love.graphics.circle("fill", lever.x, lever.y, radius)
+    love.graphics.draw(lever.Image,lever.x,lever.y)
 
 end
 
@@ -77,9 +80,6 @@ end
 
 function onLeverClick(x, y)
 
-    local slotmachine = require "src/slotmachine"
-
-    slotmachine.spin()
 
     mx = (x - screen.offsetX) / screen.scale
     my = (y - screen.offsetY) / screen.scale
@@ -90,11 +90,12 @@ function onLeverClick(x, y)
 
 -- lever onclick
     if distance <= radius and resetTimer <= 0 then
-        lever.y = lever.y + 450
         isLeverDown = true
         resetTimer = 1
+        lever.Image = love.graphics.newImage("assets/slot_lever_active.png")
 
         -- event.nextEvent()
+        slotmachine.spin()
     end
 end
 
@@ -102,7 +103,7 @@ function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
     else
-        lever.y = originalY
+        lever.Image = love.graphics.newImage("assets/slot_lever_default.png")
         isLeverDown = false
     end
 end
