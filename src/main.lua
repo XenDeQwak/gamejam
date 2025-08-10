@@ -1,6 +1,7 @@
 local scale, offsetX, offsetY, isLeverDown, originalY
 local radius = 80
 local resetTimer = 0
+local event = require "event"
 
 function love.load()
 
@@ -23,14 +24,21 @@ function love.draw()
     love.graphics.translate(offsetX, offsetY)
     love.graphics.scale(scale)
     createScreen()
+
     if isLeverDown then
         slot()
     end
+
+    if event.message then 
+        event.draw()
+    end
+
     love.graphics.pop()
 end
 
 function love.update(dt)
     leverTimer(dt)
+    event.update(dt)
 end
 
 function love.resize(w, h)

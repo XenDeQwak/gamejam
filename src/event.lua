@@ -1,47 +1,68 @@
 local event = {
-    isBroke=false,
+    isBroke=true,
     hasDebt=false,
     familyAnger=0,
     debt=0,
-    availableEvents={}
+    availableEvents={},
+    message=nil,
+    popupTimer=0
 }
-
-function isBrokeFunc()
-    return event.isBroke
+function event.load()
+    love.graphics.newImage('assets')
+end
+function event.draw()
+    love.graphics.print(event.message,450, 500)
 end
 
-function hasDebtFunc()
-    return event.hasDebt
+-- function event.update(dt)
+--     if event.popupTimer > 0 then
+--         event.popupTimer = event.popupTimer - dt
+--     else
+--         event.message=nil
+--     end
+-- end
+
+function event.mousepressed(x,y,button)
+    if button == 1 then
+
+    end
 end
 
+function button(text,func,func_param,width,height)
+
+end
+
+function outOfMoney()
+    print("OUT OF MONEY")
+    event.message="OUT OF MONEY"
+    event.popupTimer=3
+    -- Popup, GO TO MAFIA or SELL HOUSE
+
+end
+
+function mafiaDebt()
+    print("MAFIA DEBT")
+    event.message="MAFIA DEBT"
+    event.popupTimer=3
+    -- if choice no, cooldown 3
+    -- if choice yes, money== money-debt, hasDebt=false
+end 
 
 local allEvents = {
     {
         name = "Broke",
-        condition = isBrokeFunc,
+        condition = function() return event.isBroke end,
         action = outOfMoney,
         cooldown = 0
     },
     {
         -- TODO: Say NO, cooldown == 3
         name = "Debt",
-        condition = hasDebtFunc,
+        condition = function() return event.hasDebt end,
         action = mafiaDebt,
         cooldown = 0
     }
 }
-
-function event.nextEvent()
-    for index,event in ipairs(availableEvents()) do
-        print(event.name)
-    end
-    local available = availableEvents()
-    if #available == 0 then
-        return nil
-    end
-    local choice = available[math.random(#available)]
-    return choice
-end
 
 function availableEvents()
     local available = {}
@@ -55,16 +76,17 @@ function availableEvents()
     return available
 end
 
-function outOfMoney()
-    love.graphics.print("OUT OF MONEY", 450, 500)
-    -- Popup, GO TO MAFIA or SELL HOUSE
-
+function event.nextEvent()
+    for index,event in ipairs(availableEvents()) do
+        print(event.name)
+    end
+    local available = availableEvents()
+    if #available == 0 then
+        print("ror")
+        return nil
+    end
+    local choice = available[math.random(#available)]
+    choice.action()
 end
-
-function mafiaDebt()
-    love.graphics.print("SOMEONE IS AT THE DOOR", 450, 500)
-    -- if choice no, cooldown 3
-    -- if choice yes, money== money-debt, hasDebt=false
-end 
 
 return event 
