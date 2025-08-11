@@ -76,7 +76,6 @@ end
 
 function love.update(dt)
     leverTimer(dt)
-    love.timer.sleep(0.1)
 end
 
 function love.resize(w, h)
