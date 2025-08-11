@@ -15,7 +15,15 @@ function event.load()
 
 end
 function event.draw()
+   
+    --this is just a grey overlay bg thing, only way i could get it to work for some reason
+    love.graphics.push()
+    love.graphics.origin()
+    love.graphics.setColor(0,0,0,0.5)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+    love.graphics.pop()
 
+    love.graphics.setColor(1,1,1,1)
     love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
 
     -- love.graphics.setColor(color.setRGBA(255,0,0))
@@ -27,9 +35,8 @@ function event.draw()
     local boxStart = 396
     local messageY = (boxheight*0.3)+boxStart
     local maxWidth=350
-
-
     love.graphics.printf(event.message,900,messageY,maxWidth,"center")
+
 end
 
 function event.mousepressed(x,y,button)
