@@ -8,6 +8,7 @@ local slotmachine = require "src/slotmachine"
 local color = require "src/color"
 local buttonMaker = require "src.buttonmaker"
 local bm
+local image ={}
 
 function love.load()
 
@@ -15,17 +16,20 @@ function love.load()
     
     love.window.setMode(1280,720,{resizable=true})
     love.graphics.setFont(love.graphics.newFont(32))
-    love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
     screen.updateScale(love.graphics.getDimensions())
+    image.background = love.graphics.newImage("assets/ui/background.png")
+    image.slots = love.graphics.newImage("assets/Slot Machine/slot_machine.png")
 
-    lever = {x = 1300, y = 280}
-    msgTab = {x = 510, y = 150};
-    slotsTab = {x = 400, y = 150};
+    image.lever_default = love.graphics.newImage("assets/lever/slot_lever_default.png")
+    image.lever_active = love.graphics.newImage("assets/lever/slot_lever_active.png")
+    image.lever = image.lever_default
+
+    event.load()
+
+    lever = {x = 1290, y = 350}
 
     isLeverDown = false
 
-    event.load()
-    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
     bm = buttonMaker:new()
 
     local function addButton(label, xCoord, yCoord, width, height, onClick, fontSize)
@@ -38,10 +42,6 @@ function love.load()
         end
     end
 
-    function onClick()
-
-    end
-
     local btnWidth = 100
     local btnHeight = 60
     local fontSize = 20
@@ -49,21 +49,24 @@ function love.load()
     addButton("Test", 100, 100, btnWidth, btnHeight, nil, fontSize)
     addButton("Test2", 200, 100, btnWidth, btnHeight, nil, fontSize)
 
-    lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
 end
 
 function love.draw()
+
     love.graphics.push()
+
+    love.graphics.setColor(1,1,1,1)
+    local bgScaleX = love.graphics.getWidth() / image.background:getWidth()
+    local bgScaleY = love.graphics.getHeight() / image.background:getHeight()
+    love.graphics.draw(image.background, 0, 0, 0, bgScaleX, bgScaleY)
+
     love.graphics.translate(screen.offsetX, screen.offsetY)
     love.graphics.scale(screen.scale)
     createScreen()
-    
 
     if isLeverDown then
         slot()
-    end
-
-    if event.message then 
+    elseif event.message then 
         event.draw()
     end
 
@@ -72,11 +75,8 @@ function love.draw()
     love.graphics.pop()
 end
 
-
-
 function love.update(dt)
     leverTimer(dt)
-    love.timer.sleep(0.1)
 end
 
 function love.resize(w, h)
@@ -85,7 +85,9 @@ end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
-        onLeverClick(x, y)
+        if(not event.message) then 
+            onLeverClick(x, y)
+        end
     end
     bm:mousepressed(x, y, button)
 end
@@ -95,11 +97,10 @@ function createScreen()
     love.graphics.setColor(color.setRGBA(0,0,0))
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
-    
-    love.graphics.setColor(color.setRGBA(222, 184, 135))
-    love.graphics.rectangle("fill", 400, 200, 850, 650)
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(image.slots,400,175)
 
-    love.graphics.draw(lever.Image,lever.x,lever.y,0,leverScale,leverScale)
+    love.graphics.draw(image.lever,lever.x,lever.y,0,leverScale,leverScale)
 
 end
 
@@ -120,17 +121,19 @@ function onLeverClick(x, y)
     if distance <= radius and resetTimer <= 0 then
         isLeverDown = true
         resetTimer = 1
-        lever.Image = love.graphics.newImage("assets/lever/slot_lever_active.png")
+        image.lever = image.lever_active
         slotmachine.spin()
+        lever.y = lever.y+70
     end
 end
 
 function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
-    elseif resetTimer>-1 then
-        lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
+    elseif  resetTimer>-1 then
+        image.lever = image.lever_default
         isLeverDown = false
+        lever.y = lever.y-70
         resetTimer=-1
         -- event.nextEvent()
     end
