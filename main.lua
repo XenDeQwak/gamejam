@@ -100,7 +100,7 @@ function createScreen()
     love.graphics.setColor(1,1,1)
     love.graphics.draw(image.slots,400,175)
 
-    love.graphics.draw(image.lever,lever.x,lever.y,0,leverScale,leverScale)
+    love.graphics.draw(image.lever, lever.x, lever.y, 0, leverScale, leverScale)
 
 end
 
