@@ -67,19 +67,25 @@ local function drawReels (reelIndices)
     for i = 1, #reelSymbols1 do
         local index = (reel1Index + i - 2 + reelIndexOffset) % #reelSymbols1 + 1
         local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET1 % (ySpacing * 5)) % (ySpacing * 5)
-        love.graphics.draw(reelSymbols1[index], x1, newY, rotation, scale, scale)
+        if not (newY <= 190 or newY >= 710) then
+            love.graphics.draw(reelSymbols1[index], x1, newY, rotation, scale, scale)
+        end
     end
 
     for i = 1, #reelSymbols2 do
         local index = (reel2Index + i - 2 + reelIndexOffset) % #reelSymbols2 + 1
         local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET2 % (ySpacing * 5)) % (ySpacing * 5)
-        love.graphics.draw(reelSymbols2[index], x2, newY, rotation, scale, scale)
+        if not (newY <= 190 or newY >= 710) then
+            love.graphics.draw(reelSymbols2[index], x2, newY, rotation, scale, scale)
+        end
     end
 
     for i = 1, #reelSymbols3 do
         local index = (reel3Index + i - 2 + reelIndexOffset) % #reelSymbols3 + 1
         local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET3 % (ySpacing * 5)) % (ySpacing * 5)
-        love.graphics.draw(reelSymbols3[index], x3, newY, rotation, scale, scale)
+        if not (newY <= 190 or newY >= 710) then
+            love.graphics.draw(reelSymbols3[index], x3, newY, rotation, scale, scale)
+        end
     end
 end
 
