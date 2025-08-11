@@ -1,6 +1,6 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.60
+slotmachine.initialWinningChance = 0.70
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
 slotmachine.decreaseAmount = {0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10}
 slotmachine.decreaseChance = 0.10
@@ -9,20 +9,22 @@ local symbols = {
     "SEVEN",
     "CHERRY",
     "BAR",
-    "BELL"
+    "BELL",
+    "ORANGE"
 }
 
 local reels = {
-    { "SEVEN", "CHERRY", "BAR", "BELL" },
-    { "BELL", "BAR", "CHERRY", "SEVEN" },
-    { "CHERRY", "BAR", "SEVEN", "BELL" }
+    { "SEVEN", "CHERRY", "BAR", "BELL", "ORANGE" },
+    { "BELL", "BAR", "CHERRY", "SEVEN", "ORANGE" },
+    { "CHERRY", "BAR", "SEVEN", "BELL", "ORANGE" }
 }
 
 local winningIndex = {
     ["SEVEN"] = {1, 4, 3},
     ["CHERRY"] = {2, 3, 1},
     ["BAR"] = {3, 2, 2},
-    ["BELL"] = {4, 1, 4}
+    ["BELL"] = {4, 1, 4},
+    ["ORANGE"] = {5, 5, 5}
 }
 
 local function tableEquals(t1, t2)
