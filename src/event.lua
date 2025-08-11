@@ -12,34 +12,23 @@ local color = require "src/color"
 
 
 function event.load()
-
+    love.graphics.setFont(love.graphics.newFont(40))
 end
+
 function event.draw()
+    love.graphics.draw(notifSprite,575,300,0,0.4,0.4)
 
-    love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
-
-    -- love.graphics.setColor(color.setRGBA(255,0,0))
-    -- love.graphics.rectangle("fill",1000,396,100,351)
+    love.graphics.setColor(color.setRGBA(255,0,0))
+    -- love.graphics.rectangle("fill",1000,,100,1200)
 
     love.graphics.setColor(color.setRGBA(0,0,0))
     
-    local boxheight = 351
-    local boxStart = 396
-    local messageY = (boxheight*0.3)+boxStart
+    local boxheight = 352
+    local boxStart = 300
+    local messageY = (boxheight*0.5)+boxStart
     local maxWidth=350
 
-
     love.graphics.printf(event.message,900,messageY,maxWidth,"center")
-end
-
-function event.mousepressed(x,y,button)
-    if button == 1 then
-
-    end
-end
-
-function button(text,func,func_param,width,height)
-
 end
 
 function outOfMoney()
@@ -50,11 +39,24 @@ function outOfMoney()
 
 end
 
-function family()
-    print("FAMILY HANGOUT")
+local familyActions ={
+    [0] = function()
     notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
     event.message=("Dad, let's go to the park!")
-end
+    end,
+
+    [1] = function ()
+
+    end,
+
+    [2] = function ()
+
+    end,
+
+    [3] = function ()
+
+    end
+}
 
 function mafiaDebt()
     print("MAFIA DEBT")
@@ -81,7 +83,7 @@ local allEvents = {
     {
         name = "Family",
         condition = function() return event.hasFamily end,
-        action = family,
+        action = familyActions[event.familyAnger],
         cooldown=0
     }
 }
