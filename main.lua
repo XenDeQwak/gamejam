@@ -100,8 +100,6 @@ function createScreen()
     love.graphics.setColor(color.getRGBA())
     love.graphics.rectangle("fill", 400, 200, 850, 650)
 
-    color.setRGBA(255, 0, 0)
-    love.graphics.setColor(color.getRGBA())
     love.graphics.draw(lever.Image,lever.x,lever.y,0,leverScale,leverScale)
 
 end
