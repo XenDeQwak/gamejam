@@ -1,27 +1,36 @@
+local notifSprite
 local event = {
-    isBroke=true,
+    isBroke=false,
     hasDebt=false,
+    hasFamily=true,
     familyAnger=0,
     debt=0,
     availableEvents={},
-    message=nil,
-    popupTimer=0
+    message=nil
 }
+local color = require "src/color"
+
+
 function event.load()
-    notifSpriteBase = love.graphics.newImage("assets/ui/notif_box.png")
+
 end
 function event.draw()
-    love.graphics.draw(notifSpriteBase,450,500)
-    love.graphics.print(event.message,450,500)
-end
 
--- function event.update(dt)
---     if event.popupTimer > 0 then
---         event.popupTimer = event.popupTimer - dt
---     else
---         event.message=nil
---     end
--- end
+    love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
+
+    -- love.graphics.setColor(color.setRGBA(255,0,0))
+    -- love.graphics.rectangle("fill",1000,396,100,351)
+
+    love.graphics.setColor(color.setRGBA(0,0,0))
+    
+    local boxheight = 351
+    local boxStart = 396
+    local messageY = (boxheight*0.3)+boxStart
+    local maxWidth=350
+
+
+    love.graphics.printf(event.message,900,messageY,maxWidth,"center")
+end
 
 function event.mousepressed(x,y,button)
     if button == 1 then
@@ -39,6 +48,12 @@ function outOfMoney()
     event.popupTimer=3
     -- Popup, GO TO MAFIA or SELL HOUSE
 
+end
+
+function family()
+    print("FAMILY HANGOUT")
+    notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+    event.message=("Dad, let's go to the park!")
 end
 
 function mafiaDebt()
@@ -62,6 +77,12 @@ local allEvents = {
         condition = function() return event.hasDebt end,
         action = mafiaDebt,
         cooldown = 0
+    },
+    {
+        name = "Family",
+        condition = function() return event.hasFamily end,
+        action = family,
+        cooldown=0
     }
 }
 
