@@ -1,5 +1,6 @@
 local isLeverDown
-local radius = 80
+local leverScale = 2
+local radius = 80 * leverScale
 local resetTimer = 0
 local event = require "src.event"
 local screen= require "src.screen"
@@ -28,18 +29,17 @@ function love.load()
     bm = buttonMaker:new()
 
     local function addButton(label, xCoord, yCoord, width, height, onClick, fontSize)
-        local btn = bm:createButton(
-            label,
-            xCoord,
-            yCoord, 
-            width, 
-            height,
+        local btn = bm:createButton(label,xCoord,yCoord, width, height,
             --onClick is a function call (function() [statements] end)
             onClick
         )
         if fontSize then
             btn.style.font = love.graphics.newFont(fontSize)
         end
+    end
+
+    function onClick()
+
     end
 
     local btnWidth = 100
@@ -102,7 +102,7 @@ function createScreen()
 
     color.setRGBA(255, 0, 0)
     love.graphics.setColor(color.getRGBA())
-    love.graphics.draw(lever.Image,lever.x,lever.y)
+    love.graphics.draw(lever.Image,lever.x,lever.y,0,leverScale,leverScale)
 
 end
 
