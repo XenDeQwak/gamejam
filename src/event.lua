@@ -7,7 +7,7 @@ local event = {
     message=nil,
 }
 function event.load()
-    notifSpriteBase = love.graphics.newImage("assets/notif_box.png")
+    notifSpriteBase = love.graphics.newImage("assets/ui/notif_box.png")
 end
 function event.draw()
     love.graphics.draw(notifSpriteBase,450,500)
