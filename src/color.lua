@@ -10,9 +10,6 @@ color.setRGBA = function (red, green, blue, alpha)
     color.GREEN = green
     color.BLUE  = blue
     color.ALPHA = alpha or 1
-end
-
-function color.getRGBA()
     return love.math.colorFromBytes(color.RED, color.GREEN, color.BLUE)
 end
 

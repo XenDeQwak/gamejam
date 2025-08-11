@@ -1,7 +1,7 @@
 local isLeverDown
 local leverScale = 2
 local radius = 80 * leverScale
-local resetTimer = 0
+local resetTimer = -1
 local event = require "src.event"
 local screen= require "src.screen"
 local slotmachine = require "src/slotmachine"
@@ -76,7 +76,7 @@ end
 
 function love.update(dt)
     leverTimer(dt)
-    -- event.update(dt)
+    love.timer.sleep(0.1)
 end
 
 function love.resize(w, h)
@@ -92,12 +92,11 @@ end
 
 function createScreen()
 
-    color.setRGBA(0, 0, 0)
-    love.graphics.setColor(color.getRGBA())
+    love.graphics.setColor(color.setRGBA(0,0,0))
     love.graphics.rectangle("line", 350, 150, 1200, 750)
 
-    color.setRGBA(222, 184, 135)
-    love.graphics.setColor(color.getRGBA())
+    
+    love.graphics.setColor(color.setRGBA(222, 184, 135))
     love.graphics.rectangle("fill", 400, 200, 850, 650)
 
     love.graphics.draw(lever.Image,lever.x,lever.y,0,leverScale,leverScale)
@@ -122,8 +121,6 @@ function onLeverClick(x, y)
         isLeverDown = true
         resetTimer = 1
         lever.Image = love.graphics.newImage("assets/lever/slot_lever_active.png")
-
-        -- event.nextEvent()
         slotmachine.spin()
     end
 end
@@ -131,8 +128,10 @@ end
 function leverTimer(dt)
     if resetTimer > 0 then
         resetTimer = resetTimer - dt
-    else
+    elseif resetTimer>-1 then
         lever.Image = love.graphics.newImage("assets/lever/slot_lever_default.png")
         isLeverDown = false
+        resetTimer=-1
+        -- event.nextEvent()
     end
 end
