@@ -10,6 +10,80 @@ local buttonMaker = require "src.buttonmaker"
 local bm
 local image ={}
 
+-- Reels
+local slotSymbols = {
+    ["SEVEN"] = "assets/symbols/slot-symbol1.png",
+    ["CHERRY"] = "assets/symbols/slot-symbol2.png",
+    ["BELL"] = "assets/symbols/slot-symbol3.png",
+    ["BAR"] = "assets/symbols/slot-symbol4.png",
+    ["ORANGE"] = "assets/symbols/slot-symbol5.png"
+}
+local slotmachineReels = slotmachine.getReels()
+local reel1 = slotmachineReels[1]
+local reel2 = slotmachineReels[2]
+local reel3 = slotmachineReels[3]
+local reelSymbols1 = {
+    love.graphics.newImage(slotSymbols[reel1[1]]),
+    love.graphics.newImage(slotSymbols[reel1[2]]),
+    love.graphics.newImage(slotSymbols[reel1[3]]),
+    love.graphics.newImage(slotSymbols[reel1[4]]),
+    love.graphics.newImage(slotSymbols[reel1[5]])
+}
+local reelSymbols2 = {
+    love.graphics.newImage(slotSymbols[reel2[1]]),
+    love.graphics.newImage(slotSymbols[reel2[2]]),
+    love.graphics.newImage(slotSymbols[reel2[3]]),
+    love.graphics.newImage(slotSymbols[reel2[4]]),
+    love.graphics.newImage(slotSymbols[reel2[5]])
+}
+local reelSymbols3 = {
+    love.graphics.newImage(slotSymbols[reel3[1]]),
+    love.graphics.newImage(slotSymbols[reel3[2]]),
+    love.graphics.newImage(slotSymbols[reel3[3]]),
+    love.graphics.newImage(slotSymbols[reel3[4]]),
+    love.graphics.newImage(slotSymbols[reel3[5]])
+}
+
+local spinSpeed = 100
+local reelsSpins = 45
+local remainingSpins = {0,0,0}
+local currentIndices = {1, 1, 1}
+local offsetY = {OFFSET1 = 0, OFFSET2 = 0, OFFSET3 = 0}
+
+local function drawReels (reelIndices)
+    local x1 = 524
+    local x2 = 717
+    local x3 = 912
+    local initialY = 100
+    local ySpacing = 180
+    local rotation = 0
+    local scale = 1.4
+
+    local reel1Index = reelIndices[1]
+    local reel2Index = reelIndices[2]
+    local reel3Index = reelIndices[3]
+    local reelIndexOffset = -2
+
+    for i = 1, #reelSymbols1 do
+        local index = (reel1Index + i - 2 + reelIndexOffset) % #reelSymbols1 + 1
+        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET1 % (ySpacing * 5)) % (ySpacing * 5)
+        love.graphics.draw(reelSymbols1[index], x1, newY, rotation, scale, scale)
+    end
+
+    for i = 1, #reelSymbols2 do
+        local index = (reel2Index + i - 2 + reelIndexOffset) % #reelSymbols2 + 1
+        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET2 % (ySpacing * 5)) % (ySpacing * 5)
+        love.graphics.draw(reelSymbols2[index], x2, newY, rotation, scale, scale)
+    end
+
+    for i = 1, #reelSymbols3 do
+        local index = (reel3Index + i - 2 + reelIndexOffset) % #reelSymbols3 + 1
+        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET3 % (ySpacing * 5)) % (ySpacing * 5)
+        love.graphics.draw(reelSymbols3[index], x3, newY, rotation, scale, scale)
+    end
+end
+
+
 function love.load()
 
     print("Game started!")
@@ -49,6 +123,10 @@ function love.load()
     addButton("Test", 100, 100, btnWidth, btnHeight, nil, fontSize)
     addButton("Test2", 200, 100, btnWidth, btnHeight, nil, fontSize)
 
+    
+
+    
+
 end
 
 function love.draw()
@@ -62,20 +140,36 @@ function love.draw()
 
     love.graphics.translate(screen.offsetX, screen.offsetY)
     love.graphics.scale(screen.scale)
-    createScreen()
+
+    drawReels(currentIndices)
 
     if isLeverDown then
         slot()
-    elseif event.message then 
+    elseif event.message then
         event.draw()
     end
+
+    createScreen()
 
     bm:draw()
 
     love.graphics.pop()
+
 end
 
 function love.update(dt)
+
+    local offset = 20
+
+    for i = 1, 3 do
+        if remainingSpins[i] > 0 then
+            remainingSpins[i] = remainingSpins[i] - 1
+            if i == 1 then offsetY.OFFSET1 = offsetY.OFFSET1 + offset end
+            if i == 2 then offsetY.OFFSET2 = offsetY.OFFSET2 + offset end
+            if i == 3 then offsetY.OFFSET3 = offsetY.OFFSET3 + offset end
+        end
+    end
+
     leverTimer(dt)
 end
 
@@ -105,7 +199,7 @@ function createScreen()
 end
 
 function slot()
-    love.graphics.print("THE SLOT IS ROLLING", 450, 500)
+
 end
 
 function onLeverClick(x, y)
@@ -119,10 +213,19 @@ function onLeverClick(x, y)
 
 -- lever onclick
     if distance <= radius and resetTimer <= 0 then
+        
+        local result = slotmachine.spin()
+        currentIndices = result[1]
+        local randomSpinMultiplier = math.random(5,10)
+        remainingSpins = {
+            reelsSpins * randomSpinMultiplier,
+            reelsSpins * (randomSpinMultiplier+2),
+            reelsSpins * (randomSpinMultiplier+5)
+        }
+
         isLeverDown = true
         resetTimer = 1
         image.lever = image.lever_active
-        slotmachine.spin()
         lever.y = lever.y+70
     end
 end
