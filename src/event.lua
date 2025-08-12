@@ -8,7 +8,7 @@ local event = {
     message=nil
 }
 
-local color = require "src/color"
+local color = require "src.color"
 local btnWidth = 150
 local btnHeight = 75
 local fontSize = 20
