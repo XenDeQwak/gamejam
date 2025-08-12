@@ -1,4 +1,3 @@
-local isLeverDown
 local radius = 48
 local resetTimer = -1
 local event = require "src.event"
@@ -100,7 +99,6 @@ function love.load()
     image.lever = image.lever_default
 
     lever = {x = 1290, y = 350}
-    isLeverDown = false
 
     function AddButton(label, xCoord, yCoord, width, height, onClick, fontSize)
         btn = bm:createButton(label, xCoord, yCoord, width, height, onClick)
@@ -118,9 +116,7 @@ end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1, 1)
-    local bgScaleX = love.graphics.getWidth() / image.background:getWidth()
-    local bgScaleY = love.graphics.getHeight() / image.background:getHeight()
-    love.graphics.draw(image.background, 0, 0, 0, bgScaleX, bgScaleY)
+    love.graphics.draw(image.background, 0, 0, 0)
 
     drawReels(currentIndices)
     createScreen()
@@ -182,8 +178,7 @@ function onLeverClick(x, y)
             reelsSpins * (randomSpinMultiplier + 2),
             reelsSpins * (randomSpinMultiplier + 5)
         }
-        isLeverDown = true
-        resetTimer = 1
+        resetTimer = 1.25
         image.lever = image.lever_active
         lever.y = lever.y + 70
     end
@@ -194,9 +189,8 @@ function leverTimer(dt)
         resetTimer = resetTimer - dt
     elseif resetTimer > -1 then
         image.lever = image.lever_default
-        isLeverDown = false
         lever.y = lever.y - 70
         resetTimer = -1
-        -- event.nextEvent()
+        event.nextEvent()
     end
 end
