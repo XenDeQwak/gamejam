@@ -58,15 +58,15 @@ local familyActions ={
         notifSprite = daughter1
         event.message=("Dad, let's go to the park!")
 
-        eventBtn1 = AddButton("Sure!",875, 650, btnWidth, btnHeight, function() 
-            if(money<1000) then
+        eventBtn1 = AddButton("Sure!\n[COST: $500]",875, 650, btnWidth, btnHeight, function() 
+            if(money<500) then
                 notEnoughMoney=true
-                moneyStr="1000"
+                moneyStr="500"
             else
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
-                moneyMod:subtract(1000)
+                moneyMod:subtract(500)
             end
         end,fontSize)
 
@@ -82,13 +82,13 @@ local familyActions ={
 
     [1] = function ()
         -- notifSprite = wife1
-        event.message=("Honey, we didn't celebrate Olivia's birthday. ")
-        eventBtn1 = AddButton("Plan Party ",875, 650, btnWidth, btnHeight, function() 
-            if(money<3000) then
+        event.message=("Honey, we didn't celebrate Olivia's birthday.")
+        eventBtn1 = AddButton("Plan Party\n[COST: $1500]",875, 650, btnWidth, btnHeight, function() 
+            if(money<1500) then
                 notEnoughMoney=true
-                moneyStr="3000"
+                moneyStr="1500"
             else
-                moneyMod:subtract(3000)
+                moneyMod:subtract(1500)
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
@@ -109,12 +109,12 @@ local familyActions ={
         -- notifSprite=daughter2
         event.message=("Is that game more important than me?")
 
-        eventBtn1 = AddButton("Buy Gifts",875, 650, btnWidth, btnHeight, function() 
-            if(money<5000) then
+        eventBtn1 = AddButton("Buy Gifts\n[COST: $3500]",875, 650, btnWidth, btnHeight, function() 
+            if(money<3500) then
                 notEnoughMoney=true
-                moneyStr="5000"
+                moneyStr="3500"
             else
-                moneyMod:subtract(5000)
+                moneyMod:subtract(3500)
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
@@ -135,7 +135,7 @@ local familyActions ={
         -- notifSprite=wife2
         event.message=("This isn't good for Olivia. We are leaving.")
 
-        eventBtn1 = AddButton("Make Up with Family", 875, 650, btnWidth, btnHeight, function()
+        eventBtn1 = AddButton("Make Up with Family\n[COST: $5000]", 875, 650, btnWidth, btnHeight, function()
             if(money<5000) then
                 notEnoughMoney=true
                 moneyStr="5000"
