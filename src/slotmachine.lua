@@ -4,6 +4,7 @@ slotmachine.initialWinningChance = 0.60
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
 slotmachine.decreaseAmount = {0.05}
 slotmachine.decreaseChance = 0.50
+slotmachine.rewardAction = nil
 
 local symbols = {
     "SEVEN",

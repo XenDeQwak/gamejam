@@ -8,6 +8,8 @@ local money = require "src.money"
 local bm = buttonMaker:new()
 local image = {}
 local spins = 0;
+local isSpinning = false
+local eventsTriggered = true
 
 -- Reels
 local slotSymbols = {
@@ -108,7 +110,10 @@ end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
-        if not event.message and money.AMOUNT >= 100 then 
+        local hasNoEvent = not event.message
+        local hasEnoughMoney = money.AMOUNT >= 100
+        local isNotSpinning = not isSpinning
+        if hasNoEvent and hasEnoughMoney and isNotSpinning then
             onLeverClick(x, y)
         end
     end
@@ -135,16 +140,7 @@ function onLeverClick(x, y)
 
     if distance <= radius and resetTimer <= 0 then
 
-        -- Spin the slot machine
-        money:subtract(100)
-        local result = slotmachine.spin(spins)
-        spins = spins + 1
-        currentIndices = result[1]
-        remainingSpins = {
-            reelsSpins * math.random(3, 5),
-            reelsSpins * math.random(5, 7),
-            reelsSpins * math.random(10, 12)
-        }
+        startSpin()
 
         resetTimer = 1.25
         image.lever = image.lever_active
@@ -159,16 +155,58 @@ function leverTimer(dt)
         image.lever = image.lever_default
         lever.y = lever.y - 70
         resetTimer = -1
-        event.nextEvent()
     end
+end
+
+function startSpin()
+    eventsTriggered = false
+
+    money:subtract(100)
+    local result = slotmachine.spin(spins)
+    spins = spins + 1
+    currentIndices = result[1]
+    local isWin = result[2]
+    remainingSpins = {
+        reelsSpins * math.random(3, 5),
+        reelsSpins * math.random(5, 7),
+        reelsSpins * math.random(10, 12)
+    }
+    local reward = require "src.reward"
+    local rewardMoney = function ()
+        if isWin then
+            local prizeMoney = 300
+            money:add(prizeMoney)
+        end
+    end
+    reward:setReward(rewardMoney)
+    slotmachine.rewardAction = reward
+    isSpinning = true
 end
 
 function spinningReels(dt)
     local offset = 20
+    local notSpinning = true
+
     for i = 1, 3 do
         if remainingSpins[i] > 0 then
+            notSpinning = false
             remainingSpins[i] = remainingSpins[i] - 1
             offsets[i] = offsets[i] + offset
         end
     end
+
+    if notSpinning and not eventsTriggered then
+        isSpinning = false
+        eventsTriggered = true
+        triggerEvents()
+    end
+end
+
+function triggerEvents()
+    if slotmachine.rewardAction then
+        slotmachine.rewardAction:grantReward()
+    end
+    
+    -- others
+    event.nextEvent()
 end
