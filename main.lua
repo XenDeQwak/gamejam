@@ -128,6 +128,9 @@ function love.draw()
     end
     bm:draw()
 
+    local text = "$$$: " .. tostring(money.AMOUNT)
+    local x, y = 50, 50
+    love.graphics.print(text, x, y)
 end
 
 function love.update(dt)
@@ -172,6 +175,9 @@ function onLeverClick(x, y)
     local distance = math.sqrt(dx * dx + dy * dy)
 
     if distance <= radius and resetTimer <= 0 then
+
+        -- Spin the slot machine
+        money:subtract(100)
         local result = slotmachine.spin(spins)
         spins = spins + 1
         currentIndices = result[1]
@@ -181,6 +187,7 @@ function onLeverClick(x, y)
             reelsSpins * (randomSpinMultiplier + 2),
             reelsSpins * (randomSpinMultiplier + 5)
         }
+
         resetTimer = 1.25
         image.lever = image.lever_active
         lever.y = lever.y + 70
