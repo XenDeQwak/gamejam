@@ -2,9 +2,10 @@ local isLeverDown
 local radius = 48
 local resetTimer = -1
 local event = require "src.event"
-local slotmachine = require "src/slotmachine"
-local color = require "src/color"
+local slotmachine = require "src.slotmachine"
+local color = require "src.color"
 local buttonMaker = require "src.buttonmaker"
+local money = require "src.money"
 local bm = buttonMaker:new()
 local image = {}
 
