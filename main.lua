@@ -7,6 +7,7 @@ local buttonMaker = require "src.buttonmaker"
 local money = require "src.money"
 local bm = buttonMaker:new()
 local image = {}
+local spins = 0;
 
 -- Reels
 local slotSymbols = {
@@ -115,6 +116,7 @@ function love.load()
 end
 
 function love.draw()
+
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(image.background, 0, 0, 0)
 
@@ -170,7 +172,8 @@ function onLeverClick(x, y)
     local distance = math.sqrt(dx * dx + dy * dy)
 
     if distance <= radius and resetTimer <= 0 then
-        local result = slotmachine.spin()
+        local result = slotmachine.spin(spins)
+        spins = spins + 1
         currentIndices = result[1]
         local randomSpinMultiplier = math.random(5, 10)
         remainingSpins = {

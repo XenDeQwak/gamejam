@@ -1,9 +1,9 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.70
+slotmachine.initialWinningChance = 0.60
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
-slotmachine.decreaseAmount = {0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10}
-slotmachine.decreaseChance = 0.10
+slotmachine.decreaseAmount = {0.05}
+slotmachine.decreaseChance = 0.50
 
 local symbols = {
     "SEVEN",
@@ -54,14 +54,12 @@ local function copyTable(t)
     return copy
 end
 
-local function rollSymbols()
-
-    print("Win Chance: " .. slotmachine.currentWinningChance)
+local function rollSymbols(spins)
 
     local chance = math.random()
     local isWin = false
     local lossSeverity = 0
-    if slotmachine.currentWinningChance > chance then
+    if slotmachine.currentWinningChance > chance or spins == 0 then
         isWin = true
     else
         lossSeverity = math.random(1, 5)
@@ -71,16 +69,15 @@ local function rollSymbols()
 
     local chosenSymbol = symbols[math.random(1, #symbols)]
     local chosenSymbolIndices = copyTable(winningIndex[chosenSymbol])
-    print("Chosen Symbol: " .. chosenSymbol .. " with indices: " .. table.concat(chosenSymbolIndices, ", "))
+    --print("Chosen Symbol: " .. chosenSymbol .. " with indices: " .. table.concat(chosenSymbolIndices, ", "))
 
     if not isWin then
-        print("Loss Severity: " .. lossSeverity)
+        --print("Loss Severity: " .. lossSeverity)
 
         local loopGuard = 50
         local stillHasWinningIndices = true
         while stillHasWinningIndices and loopGuard > 0 do
             loopGuard = loopGuard - 1
-            --print("Loop Guard: " .. loopGuard)
 
             for i=1, lossSeverity do
                 local randomIndex = math.random(1, #chosenSymbolIndices)
@@ -99,16 +96,16 @@ local function rollSymbols()
                 --print("Checking symbol: " .. symbol .. " with indices: " .. table.concat(indices, ", ") .. " against chosen indices: " .. table.concat(chosenSymbolIndices, ", ") .. "; isWin?=" .. tostring(found))
                 if found then
                     stillHasWinningIndices = true
-                    print("Found Non-Winning Indices: " .. symbol)
+                    --print("Found Non-Winning Indices: " .. symbol)
                     break
                 end
             end
 
-            print("Rerolled Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
+            --print("Rerolled Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
         end
 
         if loopGuard <= 0 then
-            print("Warning: Loop guard triggered, unable to find a non-winning combination.")
+            --print("Warning: Loop guard triggered, unable to find a non-winning combination.")
         end
 
     end
@@ -119,16 +116,18 @@ local function rollSymbols()
         reels[3][chosenSymbolIndices[3]]
     }
 
-    print("Final Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
-    print("Final Symbols: " .. table.concat(symbols, ", ") .. "\n")
+    --print("Final Symbol Indices: " .. table.concat(chosenSymbolIndices, ", "))
+    --print("Final Symbols: " .. table.concat(symbols, ", ") .. "\n")
 
 
     return {symbols, isWin, chosenSymbolIndices}
 
 end
 
-slotmachine.spin = function()
+slotmachine.spin = function(spins)
 
+    print("Win Chance: " .. slotmachine.currentWinningChance)
+    
     print("Decrease Chance: " .. slotmachine.decreaseChance)
     local chance = math.random()
     local chanceToDecrease = slotmachine.decreaseChance
@@ -141,15 +140,15 @@ slotmachine.spin = function()
     if slotmachine.decreaseChance < 0.50 then
         slotmachine.decreaseChance = slotmachine.decreaseChance + 0.01
     end
-
-    local rolledSymbols = rollSymbols()
+    
+    local rolledSymbols = rollSymbols(spins)
     local symbols = rolledSymbols[1]
     local isWin = rolledSymbols[2]
     local indices = rolledSymbols[3]
     --local test = symbols[1] == symbols[2] and symbols[2] == symbols[3]
 
     --print("ProjectedWin?: " .. tostring(test))
-    print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
+    --print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
     
     return {indices, isWin}
 end
