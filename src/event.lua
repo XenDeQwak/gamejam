@@ -16,6 +16,8 @@ local notEnoughMoney = nil
 local moneyStr = nil
 local daughter1,daughter2,wife1,wife2,mafia,house
 local eventBtn1,eventBtn2,okBtn,noBtn
+local moneyMod = require("src.money")
+local money
 
 function event.load()
     love.graphics.setFont(love.graphics.newFont(40))
@@ -28,7 +30,7 @@ function event.load()
 end
 
 function event.draw()
-   
+    money=moneyMod.AMOUNT
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
@@ -57,14 +59,15 @@ local familyActions ={
         event.message=("Dad, let's go to the park!")
 
         eventBtn1 = AddButton("Sure!",875, 650, btnWidth, btnHeight, function() 
-            -- if(money<1000) then
+            if(money<1000) then
                 notEnoughMoney=true
                 moneyStr="1000"
-            -- else
+            else
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
-            -- end
+                moneyMod:subtract(1000)
+            end
         end,fontSize)
 
         eventBtn2 = AddButton("I'm Busy", 1075, 650, btnWidth, btnHeight, function() 
@@ -81,15 +84,16 @@ local familyActions ={
         -- notifSprite = wife1
         event.message=("Honey, we didn't celebrate Olivia's birthday. ")
         eventBtn1 = AddButton("Plan Party ",875, 650, btnWidth, btnHeight, function() 
-            -- if(money<3000) then
+            if(money<3000) then
                 notEnoughMoney=true
                 moneyStr="3000"
-            -- else
+            else
+                moneyMod:subtract(3000)
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
                 event.familyAnger=0
-            -- end
+            end
         end,fontSize)
 
         eventBtn2 = AddButton("I'm Busy", 1075, 650, btnWidth, btnHeight, function()
@@ -106,15 +110,16 @@ local familyActions ={
         event.message=("Is that game more important than me?")
 
         eventBtn1 = AddButton("Buy Gifts",875, 650, btnWidth, btnHeight, function() 
-            -- if(money<5000) then
+            if(money<5000) then
                 notEnoughMoney=true
                 moneyStr="5000"
-            -- else
+            else
+                moneyMod:subtract(5000)
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
                 event.familyAnger=0
-            -- end
+            end
         end,fontSize)
 
         eventBtn2 = AddButton("Yes", 1075, 650, btnWidth, btnHeight, function()
@@ -131,24 +136,26 @@ local familyActions ={
         event.message=("This isn't good for Olivia. We are leaving.")
 
         eventBtn1 = AddButton("Make Up with Family", 875, 650, btnWidth, btnHeight, function()
-            -- if(money<5000) then
+            if(money<5000) then
                 notEnoughMoney=true
                 moneyStr="5000"
-            -- else
+            else
+                moneyMod:subtract(5000)
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
                 event.familyAnger=2
-            -- end
+            end
         end, fontSize-7)
 
         eventBtn2 = AddButton("whatever..",1075, 650, btnWidth, btnHeight, function() 
+
             notEnoughMoney=false
-            -- notifSprite=daughter2
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
             event.familyAnger=event.familyAnger+1
 
+            -- notifSprite=daughter2
             event.message=("Your family has left you")
             okBtn = AddButton("Okay",975,650,btnWidth,btnHeight,function()
                 RemoveButton(okBtn)
@@ -174,12 +181,13 @@ local function mafiaDebt()
     event.message=("We've come to collect.")
 
     eventBtn1 = AddButton("Pay",1075, 650, btnWidth, btnHeight, function() 
-        -- if(money<3300) then
-        --     notenoughmoney=true
-        --     moneystr="3300"
-        -- else
-            --money = money-3300
+        if(money<3300) then
+            notEnoughMoney=true
+            moneyStr="3300"
+        else
+            moneyMod:subtract(3300)
             event.hasDebt=false
+        end
         RemoveButton(eventBtn1)
         RemoveButton(eventBtn2)
     end,fontSize)
@@ -206,11 +214,15 @@ local function outOfMoney()
         eventBtn1 = AddButton("Borrow from Mafia", 875, 650, btnWidth, btnHeight, function()
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
+
             event.message=("We Will Collect.\nYou have gained 3000$")
+            moneyMod:add(3000)
+
             okBtn = AddButton("Great",975,650,btnWidth,btnHeight,function()
                 RemoveButton(okBtn)
                 event.message=nil
             end,fontSize)
+
             event.hasDebt=true
         end, fontSize-4)
     end
@@ -218,19 +230,22 @@ local function outOfMoney()
     if event.hasHouse then
         eventBtn2 = AddButton("Sell House",1075, 650, btnWidth, btnHeight, function() 
             -- notifSprite = daughter2
-            --money=money+10000
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
+
             event.familyAnger=4
             event.hasHouse=false
+            moneyMod:add(10000)
 
             event.message=("Your family has left you.\n You gained 10000$")
             okBtn = AddButton("oh",975,650,btnWidth,btnHeight,function()
                 RemoveButton(okBtn)
                 event.message=nil
             end,fontSize)
+
         end,fontSize)
     end
+
     if not event.hasHouse and event.hasDebt then
         -- notifSprite=daughter2
         event.message=("Cannot get any more money\n\nGame Over")
