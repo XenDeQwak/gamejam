@@ -17,32 +17,16 @@ local slotSymbols = {
     ["BAR"] = "assets/symbols/slot-symbol4.png",
     ["ORANGE"] = "assets/symbols/slot-symbol5.png"
 }
-local slotmachineReels = slotmachine.getReels()
-local reel1 = slotmachineReels[1]
-local reel2 = slotmachineReels[2]
-local reel3 = slotmachineReels[3]
 
-local reelSymbols1 = {
-    love.graphics.newImage(slotSymbols[reel1[1]]),
-    love.graphics.newImage(slotSymbols[reel1[2]]),
-    love.graphics.newImage(slotSymbols[reel1[3]]),
-    love.graphics.newImage(slotSymbols[reel1[4]]),
-    love.graphics.newImage(slotSymbols[reel1[5]])
+local slotmachineReels = slotmachine.getReels()
+local reelSymbols = {
+    {}, {}, {}
 }
-local reelSymbols2 = {
-    love.graphics.newImage(slotSymbols[reel2[1]]),
-    love.graphics.newImage(slotSymbols[reel2[2]]),
-    love.graphics.newImage(slotSymbols[reel2[3]]),
-    love.graphics.newImage(slotSymbols[reel2[4]]),
-    love.graphics.newImage(slotSymbols[reel2[5]])
-}
-local reelSymbols3 = {
-    love.graphics.newImage(slotSymbols[reel3[1]]),
-    love.graphics.newImage(slotSymbols[reel3[2]]),
-    love.graphics.newImage(slotSymbols[reel3[3]]),
-    love.graphics.newImage(slotSymbols[reel3[4]]),
-    love.graphics.newImage(slotSymbols[reel3[5]])
-}
+for r = 1, 3 do
+    for i = 1, 5 do
+        reelSymbols[r][i] = love.graphics.newImage(slotSymbols[slotmachineReels[r][i]])
+    end
+end
 
 local reelsSpins = 45
 local remainingSpins = {0,0,0}
@@ -51,41 +35,23 @@ local offsetY = {OFFSET1 = 0, OFFSET2 = 0, OFFSET3 = 0}
 
 local function drawReels(reelIndices)
 
-    local x1 = 524+20
-    local x2 = 717+20
-    local x3 = 912+20
+    local x = {524+20, 717+20, 912+20}
     local initialY = 110
     local ySpacing = 180
     local rotation = 0
 
-    local reel1Index = reelIndices[1]
-    local reel2Index = reelIndices[2]
-    local reel3Index = reelIndices[3]
     local reelIndexOffset = -2
 
-    for i = 1, #reelSymbols1 do
-        local index = (reel1Index + i - 2 + reelIndexOffset) % #reelSymbols1 + 1
-        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET1 % (ySpacing * 5)) % (ySpacing * 5)
-        if not (newY <= 190 or newY >= 710) then
-            love.graphics.draw(reelSymbols1[index], x1, newY, rotation)
+    for reel=1, 3 do
+        for i=1, #reelSymbols[reel] do
+            local index = (reelIndices[reel] + i - 2 + reelIndexOffset) % #reelSymbols[1] + 1
+            local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET1 % (ySpacing * 5)) % (ySpacing * 5)
+            if not (newY <= 190 or newY >= 710) then
+                love.graphics.draw(reelSymbols[reel][index], x[reel], newY, rotation)
+            end
         end
     end
 
-    for i = 1, #reelSymbols2 do
-        local index = (reel2Index + i - 2 + reelIndexOffset) % #reelSymbols2 + 1
-        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET2 % (ySpacing * 5)) % (ySpacing * 5)
-        if not (newY <= 190 or newY >= 710) then
-            love.graphics.draw(reelSymbols2[index], x2, newY, rotation)
-        end
-    end
-
-    for i = 1, #reelSymbols3 do
-        local index = (reel3Index + i - 2 + reelIndexOffset) % #reelSymbols3 + 1
-        local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET3 % (ySpacing * 5)) % (ySpacing * 5)
-        if not (newY <= 190 or newY >= 710) then
-            love.graphics.draw(reelSymbols3[index], x3, newY, rotation)
-        end
-    end
 end
 
 function love.load()
