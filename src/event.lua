@@ -292,4 +292,4 @@ function event.nextEvent()
     end
 end
 
-return event 
+return event
