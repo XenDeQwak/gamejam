@@ -22,7 +22,11 @@ function UI:createButton(label, xCoord, yCoord, btnWidth, btnHeight, onClick)
     --         love.graphics.print(self.label, self.pos.x + 5, self.pos.y + 5)
     --     end
     -- end
-    btn.click = onClick
+    btn.click = function(this, x, y)
+        if onClick then
+            onClick(this, x, y)
+        end
+    end
     return btn
 end
 
