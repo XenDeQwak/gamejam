@@ -10,19 +10,20 @@ local event = {
 }
 local color = require "src/color"
 
+local btnWidth = 150
+local btnHeight = 75
+local fontSize = 20
 
 function event.load()
     love.graphics.setFont(love.graphics.newFont(40))
+
 end
 
 function event.draw()
    
-    --this is just a grey overlay bg thing, only way i could get it to work for some reason
-    love.graphics.push()
-    love.graphics.origin()
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    love.graphics.pop()
+
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
@@ -38,11 +39,24 @@ end
 
 local familyActions ={
     [0] = function()
-    notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
-    event.message=("Dad, let's go to the park!")
-    --if yes, familyAnger = 0
-    --if no, familyAnger++
+        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        event.message=("Dad, let's go to the park!")
+        --if yes, familyAnger = 0
+        --if no, familyAnger++
+
+        eventBtn1 = AddButton("Test", 875, 650, btnWidth, btnHeight, function() 
+            RemoveButton(eventBtn1)
+            RemoveButton(eventBtn2)
+            event.message=nil
+        end,fontSize)
+
+        eventBtn2 = AddButton("Test", 1075, 650, btnWidth, btnHeight, function() 
+            RemoveButton(eventBtn1)
+            RemoveButton(eventBtn2)
+            event.message=nil
+        end, fontSize)
     end,
+
 
     [1] = function ()
     notifSprite = love.graphics.newImage("assets/ui/daughter1.png")

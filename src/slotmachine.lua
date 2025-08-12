@@ -19,6 +19,10 @@ local reels = {
     { "CHERRY", "BAR", "SEVEN", "BELL", "ORANGE" }
 }
 
+function slotmachine.getReels()
+    return reels
+end
+
 local winningIndex = {
     ["SEVEN"] = {1, 4, 3},
     ["CHERRY"] = {2, 3, 1},
@@ -119,7 +123,7 @@ local function rollSymbols()
     print("Final Symbols: " .. table.concat(symbols, ", ") .. "\n")
 
 
-    return {symbols, isWin}
+    return {symbols, isWin, chosenSymbolIndices}
 
 end
 
@@ -141,12 +145,13 @@ slotmachine.spin = function()
     local rolledSymbols = rollSymbols()
     local symbols = rolledSymbols[1]
     local isWin = rolledSymbols[2]
+    local indices = rolledSymbols[3]
     --local test = symbols[1] == symbols[2] and symbols[2] == symbols[3]
 
     --print("ProjectedWin?: " .. tostring(test))
     print("Rolled Symbols: " .. table.concat(symbols, ", ") .. "\n---------------\n")
     
-    return isWin
+    return {indices, isWin}
 end
 
 slotmachine.test_rollSymbols = function (testAttempts)
@@ -179,7 +184,7 @@ slotmachine.test_spin = function (testAttempts)
     local lossCount = 0
 
     for i=1, testAttempts do
-        local isWin = slotmachine.spin()
+        local isWin = slotmachine.spin()[2]
         if isWin then
             winCount = winCount + 1
         else
