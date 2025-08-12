@@ -1,9 +1,9 @@
 local slotmachine = {}
 
-slotmachine.initialWinningChance = 0.60
+slotmachine.initialWinningChance = 0.70
 slotmachine.currentWinningChance = slotmachine.initialWinningChance
 slotmachine.decreaseAmount = {0.05}
-slotmachine.decreaseChance = 0.50
+slotmachine.decreaseChance = 1.00
 slotmachine.rewardAction = nil
 
 local symbols = {
