@@ -5,21 +5,26 @@ local event = {
     hasHouse=true,
     mafiaWait=0,
     familyAnger=0,
-    debt=0,
-    availableEvents={},
     message=nil
 }
-local color = require "src/color"
 
+local color = require "src/color"
 local btnWidth = 150
 local btnHeight = 75
 local fontSize = 20
 local notEnoughMoney = nil
 local moneyStr = nil
+local daughter1,daughter2,wife1,wife2,mafia,house
+local eventBtn1,eventBtn2,okBtn,noBtn
 
 function event.load()
     love.graphics.setFont(love.graphics.newFont(40))
-
+    daughter1 = love.graphics.newImage("assets/ui/daughter1.png")
+    -- daughter2 = love.graphics.newImage("assets/ui/daughter2.png")
+    -- wife1 = love.graphics.newImage("assets/ui/wife1.png")
+    -- wife2 = love.graphics.newImage("assets/ui/wife2.png")
+    -- mafia = love.graphics.newImage("assets/ui/mafia.png")
+    -- house = love.graphics.newImage("assets/ui/house.png")
 end
 
 function event.draw()
@@ -48,7 +53,7 @@ end
 
 local familyActions ={
     [0] = function()
-        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        notifSprite = daughter1
         event.message=("Dad, let's go to the park!")
 
         eventBtn1 = AddButton("Sure!",875, 650, btnWidth, btnHeight, function() 
@@ -73,7 +78,7 @@ local familyActions ={
 
 
     [1] = function ()
-        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        -- notifSprite = wife1
         event.message=("Honey, we didn't celebrate Olivia's birthday. ")
         eventBtn1 = AddButton("Plan Party ",875, 650, btnWidth, btnHeight, function() 
             -- if(money<3000) then
@@ -97,7 +102,7 @@ local familyActions ={
     end,
 
     [2] = function ()
-        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        -- notifSprite=daughter2
         event.message=("Is that game more important than me?")
 
         eventBtn1 = AddButton("Buy Gifts",875, 650, btnWidth, btnHeight, function() 
@@ -122,7 +127,7 @@ local familyActions ={
     end,
 
     [3] = function ()
-        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        -- notifSprite=wife2
         event.message=("This isn't good for Olivia. We are leaving.")
 
         eventBtn1 = AddButton("Make Up with Family", 875, 650, btnWidth, btnHeight, function()
@@ -139,21 +144,21 @@ local familyActions ={
 
         eventBtn2 = AddButton("whatever..",1075, 650, btnWidth, btnHeight, function() 
             notEnoughMoney=false
-            -- notifSprite = daughter crashout img
+            -- notifSprite=daughter2
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
             event.familyAnger=event.familyAnger+1
 
             event.message=("Your family has left you")
-            okButton = AddButton("Okay",975,650,btnWidth,btnHeight,function()
-                RemoveButton(okButton)
+            okBtn = AddButton("Okay",975,650,btnWidth,btnHeight,function()
+                RemoveButton(okBtn)
                 event.message=nil
             end,fontSize)
         end,fontSize)
     end,
 
     [4] = function ()
-        notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+        -- notifSprite=daughter2
         event.message=("JUST QUIT THE GAME DAD!!!")
         noBtn = AddButton("NO!!!",975,650,btnWidth,btnHeight,function()
             RemoveButton(noBtn)
@@ -164,9 +169,9 @@ local familyActions ={
 
 local function mafiaDebt()
     print("MAFIA DEBT")
-    notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
-    event.message=("We've come to collect.")
 
+    -- notifSprite=mafia
+    event.message=("We've come to collect.")
 
     eventBtn1 = AddButton("Pay",1075, 650, btnWidth, btnHeight, function() 
         -- if(money<3300) then
@@ -195,16 +200,15 @@ end
 local function outOfMoney()
     print("OUT OF MONEY")
 
-    notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
+    -- notifSprite=mafia
     event.message=("You are out of money")
     if not event.hasDebt then
         eventBtn1 = AddButton("Borrow from Mafia", 875, 650, btnWidth, btnHeight, function()
-            -- notifSprite = mafia
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
             event.message=("We Will Collect.\nYou have gained 3000$")
-            okButton = AddButton("Great",975,650,btnWidth,btnHeight,function()
-                RemoveButton(okButton)
+            okBtn = AddButton("Great",975,650,btnWidth,btnHeight,function()
+                RemoveButton(okBtn)
                 event.message=nil
             end,fontSize)
             event.hasDebt=true
@@ -213,7 +217,7 @@ local function outOfMoney()
 
     if event.hasHouse then
         eventBtn2 = AddButton("Sell House",1075, 650, btnWidth, btnHeight, function() 
-            -- notifSprite = wife2
+            -- notifSprite = daughter2
             --money=money+10000
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
@@ -221,14 +225,14 @@ local function outOfMoney()
             event.hasHouse=false
 
             event.message=("Your family has left you.\n You gained 10000$")
-            okButton = AddButton("oh",975,650,btnWidth,btnHeight,function()
-                RemoveButton(okButton)
+            okBtn = AddButton("oh",975,650,btnWidth,btnHeight,function()
+                RemoveButton(okBtn)
                 event.message=nil
             end,fontSize)
         end,fontSize)
     end
     if not event.hasHouse and event.hasDebt then
-        -- notifSprite
+        -- notifSprite=daughter2
         event.message=("Cannot get any more money\n\nGame Over")
     end
 
