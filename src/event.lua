@@ -10,24 +10,23 @@ local event = {
 }
 local color = require "src/color"
 
+local btnWidth = 150
+local btnHeight = 75
+local fontSize = 20
 
 function event.load()
 
+
 end
+
 function event.draw()
    
-    --this is just a grey overlay bg thing, only way i could get it to work for some reason
-    love.graphics.push()
-    love.graphics.origin()
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    love.graphics.pop()
+
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
-
-    -- love.graphics.setColor(color.setRGBA(255,0,0))
-    -- love.graphics.rectangle("fill",1000,396,100,351)
 
     love.graphics.setColor(color.setRGBA(0,0,0))
     
@@ -61,6 +60,18 @@ function family()
     print("FAMILY HANGOUT")
     notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
     event.message=("Dad, let's go to the park!")
+
+    eventBtn1 = AddButton("Test", 875, 650, btnWidth, btnHeight, function() 
+        RemoveButton(eventBtn1)
+        RemoveButton(eventBtn2)
+        event.message=nil
+    end,fontSize)
+
+    eventBtn2 = AddButton("Test", 1075, 650, btnWidth, btnHeight, function() 
+        RemoveButton(eventBtn1)
+        RemoveButton(eventBtn2)
+        event.message=nil
+    end, fontSize)
 end
 
 function mafiaDebt()

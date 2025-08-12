@@ -11,7 +11,6 @@ end
 
 function UI:createButton(label, xCoord, yCoord, btnWidth, btnHeight, onClick)
     local btn = self.g:button(label, {x = xCoord, y = yCoord, w = btnWidth, h = btnHeight})
-    -- ignore, add back if assets are in place
 
     -- if imgPath then
     --     local img = love.graphics.newImage(imgPath)
@@ -28,6 +27,10 @@ function UI:createButton(label, xCoord, yCoord, btnWidth, btnHeight, onClick)
         end
     end
     return btn
+end
+
+function UI:removeButton(button)
+    self.g:rem(button)
 end
 
 function UI:update(dt)

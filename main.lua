@@ -98,24 +98,21 @@ function love.load()
     image.lever_active = love.graphics.newImage("assets/lever/slot_lever_active.png")
     image.lever = image.lever_default
 
-    event.load()
     lever = {x = 1290, y = 350}
     isLeverDown = false
-    bm = buttonMaker:new()
 
-    local function addButton(label, xCoord, yCoord, width, height, onClick, fontSize)
-        local btn = bm:createButton(label, xCoord, yCoord, width, height, onClick)
+    function AddButton(label, xCoord, yCoord, width, height, onClick, fontSize)
+        btn = bm:createButton(label, xCoord, yCoord, width, height, onClick)
         if fontSize then
             btn.style.font = love.graphics.newFont(fontSize)
         end
+        return btn
     end
 
-    local btnWidth = 100
-    local btnHeight = 60
-    local fontSize = 20
-
-    addButton("Test", 100, 100, btnWidth, btnHeight, function() print("fire") end, fontSize)
-    addButton("Test2", 200, 100, btnWidth, btnHeight, nil, fontSize)
+    function RemoveButton(btn)
+        bm:removeButton(btn)
+    end
+    event.load()
 end
 
 function love.draw()
@@ -126,12 +123,12 @@ function love.draw()
 
     drawReels(currentIndices)
     createScreen()
-    bm:draw()
 
-    if isLeverDown then
-    elseif event.message then
+    if event.message then
         event.draw()
     end
+    bm:draw()
+
 end
 
 function love.update(dt)
