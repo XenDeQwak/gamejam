@@ -28,24 +28,25 @@ for r = 1, 3 do
     end
 end
 
-local reelsSpins = 45
-local remainingSpins = {0,0,0}
-local currentIndices = {1, 1, 1}
-local offsetY = {OFFSET1 = 0, OFFSET2 = 0, OFFSET3 = 0}
+local reelsSpins        = 45
+local remainingSpins    = {0,0,0}
+local currentIndices    = {1, 1, 1}
+local offsets           = {0, 0, 0}
 
 local function drawReels(reelIndices)
 
-    local x = {524+20, 717+20, 912+20}
-    local initialY = 110
-    local ySpacing = 180
-    local rotation = 0
+    local x         = {524+20, 717+20, 912+20}
+    local initialY  = 110
+    local ySpacing  = 180
+    local rotation  = 0
 
+    -- To make it show in the middle of the reel
     local reelIndexOffset = -2
 
     for reel=1, 3 do
         for i=1, #reelSymbols[reel] do
             local index = (reelIndices[reel] + i - 2 + reelIndexOffset) % #reelSymbols[1] + 1
-            local newY = initialY + ((i - 1) * ySpacing + offsetY.OFFSET1 % (ySpacing * 5)) % (ySpacing * 5)
+            local newY = initialY + ((i - 1) * ySpacing + offsets[reel] % (ySpacing * 5)) % (ySpacing * 5)
             if not (newY <= 190 or newY >= 710) then
                 love.graphics.draw(reelSymbols[reel][index], x[reel], newY, rotation)
             end
@@ -100,22 +101,14 @@ function love.draw()
 end
 
 function love.update(dt)
-    local offset = 20
-    for i = 1, 3 do
-        if remainingSpins[i] > 0 then
-            remainingSpins[i] = remainingSpins[i] - 1
-            if i == 1 then offsetY.OFFSET1 = offsetY.OFFSET1 + offset end
-            if i == 2 then offsetY.OFFSET2 = offsetY.OFFSET2 + offset end
-            if i == 3 then offsetY.OFFSET3 = offsetY.OFFSET3 + offset end
-        end
-    end
+    spinningReels(dt)
     bm:update(dt)
     leverTimer(dt)
 end
 
 function love.mousepressed(x, y, button)
     if button == 1 then
-        if not event.message then 
+        if not event.message and money.AMOUNT >= 100 then 
             onLeverClick(x, y)
         end
     end
@@ -147,11 +140,10 @@ function onLeverClick(x, y)
         local result = slotmachine.spin(spins)
         spins = spins + 1
         currentIndices = result[1]
-        local randomSpinMultiplier = math.random(5, 10)
         remainingSpins = {
-            reelsSpins * randomSpinMultiplier,
-            reelsSpins * (randomSpinMultiplier + 2),
-            reelsSpins * (randomSpinMultiplier + 5)
+            reelsSpins * math.random(3, 5),
+            reelsSpins * math.random(5, 7),
+            reelsSpins * math.random(10, 12)
         }
 
         resetTimer = 1.25
@@ -168,5 +160,15 @@ function leverTimer(dt)
         lever.y = lever.y - 70
         resetTimer = -1
         event.nextEvent()
+    end
+end
+
+function spinningReels(dt)
+    local offset = 20
+    for i = 1, 3 do
+        if remainingSpins[i] > 0 then
+            remainingSpins[i] = remainingSpins[i] - 1
+            offsets[i] = offsets[i] + offset
+        end
     end
 end
