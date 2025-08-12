@@ -1,6 +1,6 @@
 local notifSprite
 local event = {
-    isBroke=true,
+    isBroke=false,
     hasDebt=false,
     hasHouse=true,
     mafiaWait=0,
