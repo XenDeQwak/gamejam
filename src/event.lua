@@ -41,19 +41,19 @@ local familyActions ={
     [0] = function()
         notifSprite = love.graphics.newImage("assets/ui/daughter1.png")
         event.message=("Dad, let's go to the park!")
-        --if yes, familyAnger = 0
-        --if no, familyAnger++
 
-        eventBtn1 = AddButton("Test", 875, 650, btnWidth, btnHeight, function() 
+        eventBtn1 = AddButton("Sure!", 875, 650, btnWidth, btnHeight, function() 
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
             event.message=nil
+            -- -money
         end,fontSize)
 
-        eventBtn2 = AddButton("Test", 1075, 650, btnWidth, btnHeight, function() 
+        eventBtn2 = AddButton("I'm Busy", 1075, 650, btnWidth, btnHeight, function() 
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
             event.message=nil
+            event.familyAnger=event.familyAnger+1
         end, fontSize)
     end,
 

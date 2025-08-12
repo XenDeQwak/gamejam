@@ -5,7 +5,7 @@ local event = require "src.event"
 local slotmachine = require "src/slotmachine"
 local color = require "src/color"
 local buttonMaker = require "src.buttonmaker"
-local bm
+local bm = buttonMaker:new()
 local image = {}
 
 -- Reels
