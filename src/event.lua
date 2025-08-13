@@ -3,8 +3,8 @@ local event = {
     isBroke=false,
     hasDebt=false,
     hasHouse=true,
-    mafiaWait=0,
-    familyAnger=0,
+    mafiaWait=1,
+    familyAnger=1,
     message=nil
 }
 
@@ -54,7 +54,7 @@ function event.draw()
 end
 
 local familyActions ={
-    [0] = function()
+    [1] = function()
         notifSprite = daughter1
         event.message=("Dad, let's go to the park!")
 
@@ -80,7 +80,7 @@ local familyActions ={
     end,
 
 
-    [1] = function ()
+    [2] = function ()
         -- notifSprite = wife1
         event.message=("Honey, we didn't celebrate Olivia's birthday.")
         eventBtn1 = AddButton("Plan Party\n[COST: $1500]",875, 650, btnWidth, btnHeight, function() 
@@ -105,7 +105,7 @@ local familyActions ={
         end, fontSize)
     end,
 
-    [2] = function ()
+    [3] = function ()
         -- notifSprite=daughter2
         event.message=("Is that game more important than me?")
 
@@ -131,7 +131,7 @@ local familyActions ={
         end, fontSize)
     end,
 
-    [3] = function ()
+    [4] = function ()
         -- notifSprite=wife2
         event.message=("This isn't good for Olivia. We are leaving.")
 
@@ -164,7 +164,7 @@ local familyActions ={
         end,fontSize)
     end,
 
-    [4] = function ()
+    [5] = function ()
         -- notifSprite=daughter2
         event.message=("JUST QUIT THE GAME DAD!!!")
         noBtn = AddButton("NO!!!",975,650,btnWidth,btnHeight,function()

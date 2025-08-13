@@ -10,6 +10,7 @@ local image = {}
 local spins = 0;
 local isSpinning = false
 local eventsTriggered = true
+local slotsX, slotsY = 300, 150
 
 -- Reels
 local slotSymbols = {
@@ -37,8 +38,8 @@ local offsets           = {0, 0, 0}
 
 local function drawReels(reelIndices)
 
-    local x         = {524+20, 717+20, 912+20}
-    local initialY  = 110
+    local x         = {395+20, 550+20, 705+20}
+    local initialY  = 35
     local ySpacing  = 180
     local rotation  = 0
 
@@ -50,7 +51,7 @@ local function drawReels(reelIndices)
             local index = (reelIndices[reel] + i - 2 + reelIndexOffset) % #reelSymbols[1] + 1
             local newY = initialY + ((i - 1) * ySpacing + offsets[reel] % (ySpacing * 5)) % (ySpacing * 5)
             if not (newY <= 190 or newY >= 710) then
-                love.graphics.draw(reelSymbols[reel][index], x[reel], newY, rotation)
+                love.graphics.draw(reelSymbols[reel][index], x[reel], newY, rotation, 0.8, 0.8)
             end
         end
     end
@@ -59,7 +60,6 @@ end
 
 function love.load()
     print("Game started!")
-    love.window.setMode(1920, 1080, {fullscreen = true, fullscreentype = "exclusive"})
     love.graphics.setFont(love.graphics.newFont(32))
 
     image.background = love.graphics.newImage("assets/ui/background.png")
@@ -68,7 +68,7 @@ function love.load()
     image.lever_active = love.graphics.newImage("assets/lever/slot_lever_active.png")
     image.lever = image.lever_default
 
-    lever = {x = 1290, y = 350}
+    lever = {x = 995, y = 215}
 
     function AddButton(label, xCoord, yCoord, width, height, onClick, fontSize)
         btn = bm:createButton(label, xCoord, yCoord, width, height, onClick)
@@ -89,7 +89,12 @@ function love.draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(image.background, 0, 0, 0)
 
+    slotsWidth = 800
+    slotsHeight = 560
+    
+    love.graphics.setScissor(slotsX, slotsY, slotsWidth, slotsHeight)
     drawReels(currentIndices)
+    love.graphics.setScissor()
     createScreen()
 
     if event.message then
@@ -121,11 +126,19 @@ function love.mousepressed(x, y, button)
 end
 
 function createScreen()
+    local slotsScale = 0.8
+    local screenX = 260
+    local screenY = 100
+    local screenWidth = 1000
+    local screenHeight = 650
+    local leverScale = 2
+    local orientation = 0
+
     love.graphics.setColor(color.setRGBA(0, 0, 0))
-    love.graphics.rectangle("line", 350, 150, 1200, 750)
+    love.graphics.rectangle("line",screenX, screenY, screenWidth, screenHeight)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.draw(image.slots, 400, 175)
-    love.graphics.draw(image.lever, lever.x, lever.y,0,2,2)
+    love.graphics.draw(image.slots, slotsX, slotsY, orientation, slotsScale, slotsScale)
+    love.graphics.draw(image.lever, lever.x, lever.y, orientation, leverScale, leverScale)
 
     -- love.graphics.circle("fill",lever.x+103,lever.y+65,radius)
 end
