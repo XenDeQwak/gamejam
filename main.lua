@@ -11,6 +11,10 @@ local spins = 0;
 local isSpinning = false
 local eventsTriggered = true
 local slotsX, slotsY = 300, 150
+local push = require('src.lib.push')
+local gameResWidth = 1920
+local gameResHeight = 1080
+local isFullscreen = true
 
 -- Reels
 local slotSymbols = {
@@ -60,6 +64,7 @@ end
 
 function love.load()
     print("Game started!")
+    push:setupScreen(gameResWidth, gameResHeight, baseW, baseH)
     love.graphics.setFont(love.graphics.newFont(32))
 
     image.background = love.graphics.newImage("assets/ui/background.png")
@@ -85,7 +90,7 @@ function love.load()
 end
 
 function love.draw()
-
+    push:start()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(image.background, 0, 0, 0)
 
@@ -105,12 +110,29 @@ function love.draw()
     local text = "$$$: " .. tostring(money.AMOUNT)
     local x, y = 50, 50
     love.graphics.print(text, x, y)
+    push:finish()
 end
 
 function love.update(dt)
     spinningReels(dt)
     bm:update(dt)
     leverTimer(dt)
+end
+
+function love.resize(w,h)
+    push:resize(w,h)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    if key == "f11" then
+        if isFullscreen then
+            push:setupScreen(gameResWidth, gameResHeight, 1280, 720, {fullscreen = false, resizable = true})
+            isFullscreen = false
+        else
+            push:setupScreen(gameResWidth, gameResHeight, baseW, baseH, {fullscreen = true})
+            isFullscreen = true
+        end
+    end
 end
 
 function love.mousepressed(x, y, button)
@@ -140,7 +162,7 @@ function createScreen()
     love.graphics.draw(image.slots, slotsX, slotsY, orientation, slotsScale, slotsScale)
     love.graphics.draw(image.lever, lever.x, lever.y, orientation, leverScale, leverScale)
 
-    -- love.graphics.circle("fill",lever.x+103,lever.y+65,radius)
+    love.graphics.circle("fill",lever.x+103,lever.y+65,radius)
 end
 
 
