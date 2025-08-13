@@ -5,7 +5,6 @@ money.AMOUNT = initialAmount
 
 function money:add(num)
     self.AMOUNT = self.AMOUNT + num
-    --event.isBroke=money:isBroke()
 end
 
 function money:subtract(num)

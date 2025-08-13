@@ -31,6 +31,7 @@ end
 
 function event.draw()
     money=moneyMod.AMOUNT
+    event.isBroke=moneyMod:isBroke()
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
