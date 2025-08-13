@@ -18,10 +18,10 @@ local daughter1,daughter2,wife1,wife2,mafia,house
 local eventBtn1,eventBtn2,okBtn,noBtn
 local moneyMod = require("src.money")
 local money
-local choice1btnX = 875
-local choice2btnX = 1075
-local okBtnX = 975
-local btnY = 650
+local choice1btnX = 675
+local choice2btnX = 875
+local okBtnX = 775
+local btnY = 500
 
 
 function event.load()
@@ -35,21 +35,27 @@ function event.load()
 end
 
 function event.draw()
+    local notifX = 375
+    local notifY = 200
+    local messageX = 700
+    local messageHeight = 352
+    local messageStart = 175
+    local messageY = (messageHeight*0.45)+messageStart
+    local maxWidth=350
+
+
     money=moneyMod.AMOUNT
     event.isBroke=moneyMod:isBroke()
     love.graphics.setColor(0,0,0,0.5)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
 
+
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(notifSprite,575,350,0,0.4,0.4)
+    love.graphics.draw(notifSprite,notifX, notifY ,0,0.4,0.4)
 
     love.graphics.setColor(color.setRGBA(0,0,0))
-    local messageHeight = 352
-    local messageStart = 300
-    local messageY = (messageHeight*0.45)+messageStart
-    local maxWidth=350
-    love.graphics.printf(event.message,900,messageY,maxWidth,"center")
+    love.graphics.printf(event.message,messageX,messageY,maxWidth,"center")
 
     if(notEnoughMoney) then
         love.graphics.setColor(color.setRGBA(245,245,220))
@@ -98,7 +104,7 @@ local familyActions ={
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
-                event.familyAnger=0
+                event.familyAnger=1
             end
         end,fontSize)
 
@@ -124,7 +130,7 @@ local familyActions ={
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
-                event.familyAnger=0
+                event.familyAnger=1
             end
         end,fontSize)
 
@@ -150,7 +156,7 @@ local familyActions ={
                 RemoveButton(eventBtn1)
                 RemoveButton(eventBtn2)
                 event.message=nil
-                event.familyAnger=2
+                event.familyAnger=3
             end
         end, fontSize-7)
 
@@ -239,7 +245,7 @@ local function outOfMoney()
             RemoveButton(eventBtn1)
             RemoveButton(eventBtn2)
 
-            event.familyAnger=4
+            event.familyAnger=5
             event.hasHouse=false
             moneyMod:add(10000)
 
