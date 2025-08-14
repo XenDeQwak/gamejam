@@ -13,7 +13,7 @@ Our submission for the DevCon Game Jam 2025: Break the Loop theme, which feature
   <img width="75%" height="75%" alt="image" src="https://github.com/user-attachments/assets/53bd4120-d030-4b80-9a49-b974e39cd25a" />
 
   <br>
-  Find out as you progress in the game, as it will trigger certain story events to know the fate of Olivia's father and his family. <br>
+  <br>Find out as you progress in the game, as it will trigger certain story events to know the fate of Olivia's father and his family. <br>
   <br>
   <img width="75%" height="75%" alt="image" src="https://github.com/user-attachments/assets/07ddd53c-0990-4c3b-82d0-a84c66157adf" />
 </p>
